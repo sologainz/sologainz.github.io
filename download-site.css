@@ -1078,8 +1078,7 @@ h2 {
   color: var(--faint);
 }
 
-.arena__tag--a { left: 6%; }
-.arena__tag--b { right: 6%; color: var(--heat); }
+.arena__tag--a { left: 50%; transform: translateX(-50%); }
 
 /* ── Screens (phone mockups) ────────────────────────────────────────────── */
 

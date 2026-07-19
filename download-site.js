@@ -574,44 +574,18 @@
 
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  // ── Auto‑battle arena (mirrors the app's training respawn loop) ───────────
+  // ── Solo training arena (single hunter drilling strikes, no opponent) ─────
   class Arena {
     constructor(root) {
       this.root = root;
-      // Fixed clash stances right next to each other — close enough that their
-      // strikes actually land. They never charge in or retreat; they duel in
-      // place (camera stays fixed).
-      const m = this._meet();
+      // Solo hunter drilling strikes in place, centered (camera stays fixed).
       this.a = this._make(
         root.querySelector('[data-fighter="a"]'),
         root.querySelector('[data-shadow="a"]'),
-        m.a,
+        50,
         1
       );
-      this.b = this._make(
-        root.querySelector('[data-fighter="b"]'),
-        root.querySelector('[data-shadow="b"]'),
-        m.b,
-        -1
-      );
-      // Keep the clash gap correct if the arena is resized.
-      window.addEventListener("resize", () => {
-        const n = this._meet();
-        this.a.home = n.a;
-        this.b.home = n.b;
-        this._teleport(this.a, n.a);
-        this._teleport(this.b, n.b);
-      });
       this._boot();
-    }
-
-    // Clash positions: centers ~52px apart so attacks connect without bodies
-    // overlapping (the character body is tiny and centered in each 96px frame).
-    _meet() {
-      const w = this.root.clientWidth || 560;
-      let half = ((52 / w) * 100) / 2;
-      half = Math.max(4, Math.min(8, half));
-      return { a: 50 - half, b: 50 + half };
     }
 
     _make(canvas, shadow, home, dir) {
@@ -643,108 +617,21 @@
     }
 
     async _boot() {
-      await Promise.all([this.a.sp.play("idle"), this.b.sp.play("idle")]);
+      const f = this.a;
+      this._face(f, 1);
+      await f.sp.play("idle").catch(() => {});
       if (reduceMotion) return;
+
+      // Solo training loop — the hunter drills strikes in place, no opponent.
+      const combo = ["punch", "kick", "punch3", "kick2", "kick3", "throw"];
+      let i = 0;
       for (;;) {
-        await this._round();
-        await wait(500);
+        this._anim(f, "idle");
+        await wait(700);
+        this._anim(f, combo[i % combo.length]);
+        i += 1;
+        await wait(560);
       }
-    }
-
-    async _round() {
-      const a = this.a;
-      const b = this.b;
-      a.hp = 3;
-      b.hp = 3;
-
-      // Take stance in place, facing each other (no charging in).
-      this._face(a, 1);
-      this._face(b, -1);
-      this._anim(a, "idle");
-      this._anim(b, "idle");
-      await wait(500);
-
-      // Trade blows until someone drops.
-      let turn = Math.random() < 0.5 ? a : b;
-      for (let i = 0; i < 8; i++) {
-        const atk = turn;
-        const def = turn === a ? b : a;
-        await this._trade(atk, def);
-        def.hp -= 1;
-        if (def.hp <= 0) {
-          await this._finish(atk, def);
-          break;
-        }
-        turn = def;
-      }
-
-      // Reset to a calm stance in place before the next round.
-      this._face(a, 1);
-      this._face(b, -1);
-      this._anim(a, "idle");
-      this._anim(b, "idle");
-      await wait(500);
-    }
-
-    _move(f, x) {
-      this._place(f, x);
-    }
-
-    // Instant reposition (no slide) — used for respawn teleport.
-    _teleport(f, x) {
-      const c = f.canvas;
-      const s = f.shadow;
-      const prevC = c.style.transition;
-      c.style.transition = "none";
-      let prevS;
-      if (s) {
-        prevS = s.style.transition;
-        s.style.transition = "none";
-      }
-      this._place(f, x);
-      void c.offsetWidth;
-      c.style.transition = prevC || "";
-      if (s) s.style.transition = prevS || "";
-    }
-
-    async _trade(atk, def) {
-      const moves = ["punch", "kick", "kick2", "kick3", "punch3", "throw"];
-      const m = moves[(Math.random() * moves.length) | 0];
-      this._face(atk, def.x > atk.x ? 1 : -1);
-      this._face(def, atk.x > def.x ? 1 : -1);
-
-      // Strike in place — no sliding.
-      this._anim(atk, m);
-      await wait(180);
-      this._anim(def, "hit");
-      await wait(320);
-      this._anim(atk, "idle");
-      this._anim(def, "idle");
-      await wait(160);
-    }
-
-    async _finish(atk, def) {
-      this._anim(atk, "idle");
-      this._face(def, atk.x > def.x ? 1 : -1);
-      this._anim(def, "die", { loop: false });
-      await wait(1000);
-
-      // Fade out, then respawn right where it stood (no sliding).
-      def.canvas.style.opacity = "0";
-      if (def.shadow) def.shadow.style.opacity = "0";
-      await wait(320);
-      this._face(def, def.dir);
-      this._anim(def, "getup", { loop: false });
-      def.canvas.style.opacity = "1";
-      if (def.shadow) def.shadow.style.opacity = "1";
-      // White respawn flash, like a game revive.
-      def.canvas.classList.remove("is-respawn");
-      void def.canvas.offsetWidth;
-      def.canvas.classList.add("is-respawn");
-      await wait(520);
-      this._anim(def, "idle");
-      def.hp = 3;
-      await wait(400);
     }
   }
 
