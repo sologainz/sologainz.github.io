@@ -244,10 +244,7 @@
     2: RUN_LEG,
     3: RUN_LEG,
     4: RUN_LEG,
-    5: RUN_LEG,
-    6: RUN_LEG,
-    7: RUN_LEG,
-    8: {
+    5: {
       scale: 4.4,
       final: true,
       stages: [{ x: "50%", anim: "stunned", sleep: true }],

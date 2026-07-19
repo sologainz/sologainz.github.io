@@ -95,40 +95,8 @@
       </div>
     </section>
 
-    <!-- 2 TRAINING -->
-    <section class="panel panel--train" data-index="2">
-      <div class="panel__bg panel__bg--brick" aria-hidden="true"></div>
-      <div class="panel__inner split split--flip">
-        <div class="split__stage train-stage">
-          <canvas id="trainSprite" width="420" height="368"></canvas>
-          <div class="move-strip" role="group" aria-label="Training moves">
-            <button type="button" data-move="punch" class="is-on" data-ar="لكمة">Punch</button>
-            <button type="button" data-move="kick" data-ar="ركلة">Kick</button>
-            <button type="button" data-move="kick2" data-ar="ركلة 02">Kick 02</button>
-            <button type="button" data-move="kick3" data-ar="ركلة 03">Kick 03</button>
-            <button type="button" data-move="punch3" data-ar="لكمة 03">Punch 03</button>
-            <button type="button" data-move="roll" data-ar="تدحرج">Roll</button>
-            <button type="button" data-move="jump" data-ar="قفز">Jump</button>
-            <button type="button" data-move="slide" data-ar="انزلاق">Slide</button>
-            <button type="button" data-move="sprint" data-ar="عدو">Sprint</button>
-            <button type="button" data-move="throw" data-ar="رمية">Throw</button>
-            <button type="button" data-move="hit" data-ar="ضربة">Hit</button>
-            <button type="button" data-move="knockback" data-ar="ارتداد">Knockback</button>
-          </div>
-        </div>
-        <div class="split__copy">
-          <p class="kicker" data-ar="ساحة التدريب">Training arena</p>
-          <h2 data-ar="جدران طوب. أرضية عاكسة. إطارات ضربات حيّة.">Brick walls. Reflective floor. Live hit frames.</h2>
-          <p class="body" data-ar="تدرّب على السلاسل القتالية في الساحة ذاتها التي يستخدمها التطبيق — أشجار لكم، وترقيات ركل، ونزال ضد الذكاء الاصطناعي متى أردت مواجهة حقيقية.">Practice combos in the same arena the app uses — punch trees, kick upgrades, AI sparring when you want blood in the room.</p>
-        </div>
-      </div>
-      <div class="road-runner" data-journey="2" aria-hidden="true">
-        <canvas width="180" height="300"></canvas>
-      </div>
-    </section>
-
-    <!-- 3 ENGINE + PVP -->
-    <section class="panel panel--engine" data-index="3">
+    <!-- 2 ENGINE + PVP -->
+    <section class="panel panel--engine" data-index="2">
       <div class="panel__inner trio">
         <div class="trio__copy">
           <p class="kicker" data-ar="قتال ونزال">Combat + PVP</p>
@@ -142,77 +110,13 @@
           <span class="arena__tag arena__tag--a" data-ar="تدريب">Training</span>
         </div>
       </div>
-      <div class="road-runner" data-journey="3" aria-hidden="true">
+      <div class="road-runner" data-journey="2" aria-hidden="true">
         <canvas width="180" height="300"></canvas>
       </div>
     </section>
 
-    <!-- 4 LOOT / CHESTS -->
-    <section class="panel panel--loot" data-index="4">
-      <div class="panel__inner loot">
-        <div class="loot__copy">
-          <p class="kicker" data-ar="المكافآت">Rewards</p>
-          <h2 data-ar="افتح الصناديق. واحصد ثمار اجتهادك.">Crack chests. Bank the grind.</h2>
-          <p class="body" data-ar="كل سلسلة إنجازات تُسقط غنائم — من الخشب إلى الماس. انقر على أي صندوق لتفتحه.">Every streak drops loot — wood to diamond. Tap a chest to pop it open.</p>
-        </div>
-        <div class="chest-row" role="group" aria-label="Loot chests">
-          <button type="button" class="chest" data-tier="wood">
-            <span class="chest__glow" aria-hidden="true"></span>
-            <canvas class="chest__sprite" width="120" height="120"></canvas>
-            <span class="chest__label" data-ar="خشبي">Wooden</span>
-          </button>
-          <button type="button" class="chest" data-tier="iron">
-            <span class="chest__glow" aria-hidden="true"></span>
-            <canvas class="chest__sprite" width="120" height="120"></canvas>
-            <span class="chest__label" data-ar="حديدي">Iron</span>
-          </button>
-          <button type="button" class="chest" data-tier="gold">
-            <span class="chest__glow" aria-hidden="true"></span>
-            <canvas class="chest__sprite" width="120" height="120"></canvas>
-            <span class="chest__label" data-ar="ذهبي">Gold</span>
-          </button>
-          <button type="button" class="chest" data-tier="diamond">
-            <span class="chest__glow" aria-hidden="true"></span>
-            <canvas class="chest__sprite" width="120" height="120"></canvas>
-            <span class="chest__label" data-ar="ماسي">Diamond</span>
-          </button>
-        </div>
-      </div>
-      <div class="road-runner" data-journey="4" aria-hidden="true">
-        <canvas width="180" height="300"></canvas>
-      </div>
-    </section>
-
-    <!-- 6 TRAINING LIBRARY -->
-    <section class="panel panel--library" data-index="5">
-      <div class="panel__inner library">
-        <div class="section-box">
-          <div class="library__copy">
-            <p class="kicker" data-ar="مكتبة التدريب">Training library</p>
-            <h2 data-ar="78 مهمّة. كل تكرار مشروح.">78 quests. Every rep explained.</h2>
-            <p class="body" data-ar="تمارين منزلية بوزن الجسم وتمارين أثقال كاملة في النادي — لكلٍّ منها هدف وشرح للأداء الصحيح، مباشرةً من داخل التطبيق.">Home calisthenics and full gym lifts — each with a target and a proper form tutorial, straight from the app.</p>
-          </div>
-          <div class="lib-chips" aria-hidden="true">
-            <span>Push-ups</span>
-            <span>Pull-ups</span>
-            <span>Plank</span>
-            <span>Squats</span>
-            <span>Burpees</span>
-            <span>Deadlift</span>
-            <span>Bench Press</span>
-            <span>Running</span>
-            <span>+70 more</span>
-          </div>
-          <a class="lib-open-btn" href="library.html" data-ar="افتح المكتبة الكاملة →">Open the full library →</a>
-        </div>
-      </div>
-      <div class="road-runner" data-journey="5" aria-hidden="true">
-        <canvas width="180" height="300"></canvas>
-      </div>
-    </section>
-
-    <!-- 6 TRAILER -->
-    <section class="panel panel--trailer" data-index="6">
+    <!-- 3 TRAILER -->
+    <section class="panel panel--trailer" data-index="3">
       <div class="panel__inner trailer">
         <div class="trailer__copy">
           <p class="kicker" data-ar="الإعلان">Watch</p>
@@ -231,13 +135,13 @@
           </video>
         </div>
       </div>
-      <div class="road-runner" data-journey="6" aria-hidden="true">
+      <div class="road-runner" data-journey="3" aria-hidden="true">
         <canvas width="180" height="300"></canvas>
       </div>
     </section>
 
-    <!-- 7 FAQ -->
-    <section class="panel panel--faq" data-index="7">
+    <!-- 4 FAQ -->
+    <section class="panel panel--faq" data-index="4">
       <div class="panel__inner faq">
         <div class="faq__copy">
           <p class="kicker" data-ar="أسئلة شائعة">Questions</p>
@@ -275,13 +179,13 @@
           </div>
         </div>
       </div>
-      <div class="road-runner" data-journey="7" aria-hidden="true">
+      <div class="road-runner" data-journey="4" aria-hidden="true">
         <canvas width="180" height="300"></canvas>
       </div>
     </section>
 
-    <!-- 8 FOOTER -->
-    <section class="panel panel--get" data-index="8">
+    <!-- 5 FOOTER -->
+    <section class="panel panel--get" data-index="5">
       <footer class="panel__inner site-footer">
         <div class="site-footer__top">
           <div class="site-footer__brand">
@@ -306,7 +210,7 @@
           </div>
         </div>
       </footer>
-      <div class="road-runner road-runner--hero" data-journey="8" aria-hidden="true">
+      <div class="road-runner road-runner--hero" data-journey="5" aria-hidden="true">
         <canvas width="240" height="210"></canvas>
         <div class="rr-zzz">
           <span class="zzz zzz--1">Z</span>
