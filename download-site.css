@@ -603,6 +603,49 @@ html.lang-ar .site-footer__name {
     #02050c;
 }
 
+.panel--trailer {
+  background:
+    radial-gradient(ellipse at 55% 45%, rgba(62, 176, 255, 0.14), transparent 52%),
+    linear-gradient(160deg, #03070f, #081222 50%, #03070f);
+}
+
+.trailer {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+  width: min(1180px, 92vw);
+}
+
+.trailer__copy h2 {
+  margin: 0 0 0.85rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.4vw, 2.85rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--snow);
+}
+
+.trailer__stage {
+  width: 100%;
+}
+
+.trailer__video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #000;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .trailer {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Type ───────────────────────────────────────────────────────────────── */
 
 .kicker {
