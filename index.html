@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Solo Gainz — hunt-ready fitness combat on Android. Daily quests, real combat frames, local Wi‑Fi PVP, loot chests, and rank shields. Fully offline. Direct APK download." />
+  <meta name="theme-color" content="#03070f" />
+  <meta name="robots" content="index, follow" />
+  <title>Solo Gainz — Fitness Combat for Android</title>
+  <link rel="icon" href="app_icon.png" />
+  <link rel="apple-touch-icon" href="app_icon.png" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Solo Gainz" />
+  <meta property="og:title" content="Solo Gainz — Fitness Combat for Android" />
+  <meta property="og:description" content="Daily quests, real combat frames, local Wi‑Fi PVP, loot chests, and rank shields. Fully offline. Direct APK download." />
+  <link rel="canonical" href="https://sologainz.github.io/" />
+  <meta property="og:url" content="https://sologainz.github.io/" />
+  <meta property="og:image" content="https://sologainz.github.io/app_icon.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Solo Gainz — Fitness Combat for Android" />
+  <meta name="twitter:description" content="Daily quests, real combat, local PVP, loot chests, rank shields. Fully offline. Direct APK." />
+  <meta name="twitter:image" content="https://sologainz.github.io/app_icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="download-site.css" />
+</head>
+<body class="track-page">
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="chrome">
+    <a class="chrome__brand" href="#panel-0">
+      <img src="app_icon.png" width="32" height="32" alt="" />
+      <span>Solo Gainz</span>
+    </a>
+    <div class="chrome__rail" aria-hidden="true">
+      <div class="chrome__fill" id="scrollFill"></div>
+    </div>
+    <div class="chrome__actions">
+      <button class="chrome__lang" type="button" id="langBtn" aria-label="التبديل إلى العربية">العربية</button>
+      <button class="chrome__apk" type="button" id="downloadBtn" aria-haspopup="dialog" aria-controls="downloadModal" data-ar="تحميل">Download</button>
+    </div>
+  </header>
+
+  <nav class="dots" id="dots" aria-label="Sections"></nav>
+
+  <div class="track" id="track" tabindex="0">
+    <!-- 0 INTRO -->
+    <section class="panel panel--intro" data-index="0" id="panel-0">
+      <div class="panel__bg panel__bg--arena" aria-hidden="true"></div>
+      <div class="panel__inner intro">
+        <div class="intro__head">
+          <div class="intro__text">
+            <h1 class="mega">Solo<br />Gainz</h1>
+            <p class="lead" data-ar="مهام لياقة. إطارات قتال حقيقية. نزال محلي. شخصية صيّاد واحدة.">Fitness quests. Real combat frames. Local PVP. One hunter identity.</p>
+          </div>
+          <aside class="intro__about">
+            <p class="kicker" data-ar="ما هي Solo Gainz؟">What is Solo Gainz?</p>
+            <p class="intro__about-text" data-ar="‏Solo Gainz لعبة لياقة بأسلوب تقمّص الأدوار تحوّل تمرينك إلى مطاردة. كل تكرار تسجّله يدفع مهمّة حقيقية نحو الأمام؛ أكمل تمارين يومك لتجمع نقاط الخبرة، واصعد في دروع الرتب من <strong>E إلى SG</strong>، وأثبت أنك تتطوّر في الواقع لا في اللعبة وحدها.">Solo Gainz is a fitness RPG that turns your training into a hunt. Every rep you log powers a real quest — finish your daily workouts to earn XP, rise through rank shields from <strong>E to SG</strong>, and prove you're leveling up in the real world, not just the game.</p>
+            <p class="intro__about-text" data-ar="وهي أكثر من مجرّد تطبيق لتتبّع التمارين. أتقِن نظام قتال دقيق بالإطارات، بأشجار تطوير مستقلّة للّكم والركل، ثم نازِل أصدقاءك في <strong>نزال محلي عبر الواي‑فاي</strong> — بلا خوادم ولا تأخير، مجرّد صيّادَين على الشبكة ذاتها. وحافِظ على تتابُع إنجازاتك لتفتح صناديق غنائم من الخشب إلى الماس.">It's more than a tracker. Master a frame-accurate combat system with dedicated punch and kick upgrade trees, then throw down against friends in <strong>local Wi‑Fi PVP</strong> — no servers, no lag, just two hunters on the same network. Keep your streak alive to crack loot chests from wooden to diamond.</p>
+            <p class="intro__about-text" data-ar="وهي ملكك بالكامل: <strong>تعمل دون إنترنت بالكامل</strong>، بلا حساب ولا إعلانات ولا تتبّع. أنت والاجتهاد والقتال فقط — في جيبك.">And it's yours, completely: <strong>100% offline</strong>, no account, no ads, no tracking. Just you, the grind, and the fight — in your pocket.</p>
+            <ul class="intro__points">
+              <li data-ar="مهام يومية تتجدّد مع بداية كل يوم">Daily quests that reset with your day</li>
+              <li data-ar="قتال حقيقي بأشجار تطوير">Real combat with upgrade trees</li>
+              <li data-ar="نزال محلي متعدّد اللاعبين عبر الواي‑فاي">Local multiplayer over Wi‑Fi</li>
+              <li data-ar="صناديق غنائم ودروع رتب">Loot chests &amp; rank shields</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+      <div class="road-runner road-runner--hero" data-journey="0" aria-hidden="true">
+        <canvas width="480" height="420"></canvas>
+      </div>
+    </section>
+
+    <!-- 1 QUESTS -->
+    <section class="panel panel--quests" data-index="1">
+      <div class="panel__inner split">
+        <div class="split__copy">
+          <p class="kicker" data-ar="اجتهاد يومي">Daily grind</p>
+          <h2 data-ar="مهام تتحطّم بمجرّد إتمامها.">Quests that shatter when you finish.</h2>
+          <p class="body" data-ar="تابِع تمارينك الحقيقية، واجمع نقاط الخبرة، واصعد في دروع الرتب من E إلى SG. تتجدّد اللوحة مع بداية يومك — لا مجرّد أداة تقويم.">Track real workouts, stack XP, and climb rank shields from E to SG. The board resets with your day — not a calendar widget.</p>
+        </div>
+        <div class="split__stage">
+          <div class="shield-stage" id="shieldStage" aria-hidden="true">
+            <img class="shield-back" id="shieldBack" src="media/ui/D%20Rank.png" alt="" />
+            <div class="shield-shards" id="shieldShards"></div>
+            <img class="shield-main" id="shieldMain" src="media/ui/E%20Rank.png" alt="" />
+          </div>
+        </div>
+      </div>
+      <div class="road-runner" data-journey="1" aria-hidden="true">
+        <canvas width="180" height="300"></canvas>
+      </div>
+    </section>
+
+    <!-- 2 TRAINING -->
+    <section class="panel panel--train" data-index="2">
+      <div class="panel__bg panel__bg--brick" aria-hidden="true"></div>
+      <div class="panel__inner split split--flip">
+        <div class="split__stage train-stage">
+          <canvas id="trainSprite" width="420" height="368"></canvas>
+          <div class="move-strip" role="group" aria-label="Training moves">
+            <button type="button" data-move="punch" class="is-on" data-ar="لكمة">Punch</button>
+            <button type="button" data-move="kick" data-ar="ركلة">Kick</button>
+            <button type="button" data-move="kick2" data-ar="ركلة 02">Kick 02</button>
+            <button type="button" data-move="kick3" data-ar="ركلة 03">Kick 03</button>
+            <button type="button" data-move="punch3" data-ar="لكمة 03">Punch 03</button>
+            <button type="button" data-move="roll" data-ar="تدحرج">Roll</button>
+            <button type="button" data-move="jump" data-ar="قفز">Jump</button>
+            <button type="button" data-move="slide" data-ar="انزلاق">Slide</button>
+            <button type="button" data-move="sprint" data-ar="عدو">Sprint</button>
+            <button type="button" data-move="throw" data-ar="رمية">Throw</button>
+            <button type="button" data-move="hit" data-ar="ضربة">Hit</button>
+            <button type="button" data-move="knockback" data-ar="ارتداد">Knockback</button>
+          </div>
+        </div>
+        <div class="split__copy">
+          <p class="kicker" data-ar="ساحة التدريب">Training arena</p>
+          <h2 data-ar="جدران طوب. أرضية عاكسة. إطارات ضربات حيّة.">Brick walls. Reflective floor. Live hit frames.</h2>
+          <p class="body" data-ar="تدرّب على السلاسل القتالية في الساحة ذاتها التي يستخدمها التطبيق — أشجار لكم، وترقيات ركل، ونزال ضد الذكاء الاصطناعي متى أردت مواجهة حقيقية.">Practice combos in the same arena the app uses — punch trees, kick upgrades, AI sparring when you want blood in the room.</p>
+        </div>
+      </div>
+      <div class="road-runner" data-journey="2" aria-hidden="true">
+        <canvas width="180" height="300"></canvas>
+      </div>
+    </section>
+
+    <!-- 3 ENGINE + PVP -->
+    <section class="panel panel--engine" data-index="3">
+      <div class="panel__inner trio">
+        <div class="trio__copy">
+          <p class="kicker" data-ar="قتال ونزال">Combat + PVP</p>
+          <h2 data-ar="مقاتلون بدقّة المحرّك. غرف عبر الواي‑فاي.">Engine-accurate fighters. Wi‑Fi rooms.</h2>
+          <p class="body" data-ar="هجمات مضبوطة بدقّة التصادم، ونقاط ترقية للّكم والركل، ونزال عبر الشبكة المحلية — استضِف صيّادين أو انضمّ إليهم على الشبكة ذاتها.">Collider-tuned attacks, upgrade points on punch/kick, and local network PVP — host or join hunters on the same LAN.</p>
+        </div>
+        <div class="arena" id="arena" aria-hidden="true">
+          <div class="arena__floor"></div>
+          <div class="arena__shadow" data-shadow="a"></div>
+          <div class="arena__shadow" data-shadow="b"></div>
+          <canvas class="arena__fighter" data-fighter="a" width="240" height="220"></canvas>
+          <canvas class="arena__fighter" data-fighter="b" width="240" height="220"></canvas>
+          <span class="arena__tag arena__tag--a" data-ar="أنت">You</span>
+          <span class="arena__tag arena__tag--b" data-ar="الخصم">Rival</span>
+        </div>
+      </div>
+      <div class="road-runner" data-journey="3" aria-hidden="true">
+        <canvas width="180" height="300"></canvas>
+      </div>
+    </section>
+
+    <!-- 4 LOOT / CHESTS -->
+    <section class="panel panel--loot" data-index="4">
+      <div class="panel__inner loot">
+        <div class="loot__copy">
+          <p class="kicker" data-ar="المكافآت">Rewards</p>
+          <h2 data-ar="افتح الصناديق. واحصد ثمار اجتهادك.">Crack chests. Bank the grind.</h2>
+          <p class="body" data-ar="كل سلسلة إنجازات تُسقط غنائم — من الخشب إلى الماس. انقر على أي صندوق لتفتحه.">Every streak drops loot — wood to diamond. Tap a chest to pop it open.</p>
+        </div>
+        <div class="chest-row" role="group" aria-label="Loot chests">
+          <button type="button" class="chest" data-tier="wood">
+            <span class="chest__glow" aria-hidden="true"></span>
+            <canvas class="chest__sprite" width="120" height="120"></canvas>
+            <span class="chest__label" data-ar="خشبي">Wooden</span>
+          </button>
+          <button type="button" class="chest" data-tier="iron">
+            <span class="chest__glow" aria-hidden="true"></span>
+            <canvas class="chest__sprite" width="120" height="120"></canvas>
+            <span class="chest__label" data-ar="حديدي">Iron</span>
+          </button>
+          <button type="button" class="chest" data-tier="gold">
+            <span class="chest__glow" aria-hidden="true"></span>
+            <canvas class="chest__sprite" width="120" height="120"></canvas>
+            <span class="chest__label" data-ar="ذهبي">Gold</span>
+          </button>
+          <button type="button" class="chest" data-tier="diamond">
+            <span class="chest__glow" aria-hidden="true"></span>
+            <canvas class="chest__sprite" width="120" height="120"></canvas>
+            <span class="chest__label" data-ar="ماسي">Diamond</span>
+          </button>
+        </div>
+      </div>
+      <div class="road-runner" data-journey="4" aria-hidden="true">
+        <canvas width="180" height="300"></canvas>
+      </div>
+    </section>
+
+    <!-- 6 TRAINING LIBRARY -->
+    <section class="panel panel--library" data-index="5">
+      <div class="panel__inner library">
+        <div class="section-box">
+          <div class="library__copy">
+            <p class="kicker" data-ar="مكتبة التدريب">Training library</p>
+            <h2 data-ar="78 مهمّة. كل تكرار مشروح.">78 quests. Every rep explained.</h2>
+            <p class="body" data-ar="تمارين منزلية بوزن الجسم وتمارين أثقال كاملة في النادي — لكلٍّ منها هدف وشرح للأداء الصحيح، مباشرةً من داخل التطبيق.">Home calisthenics and full gym lifts — each with a target and a proper form tutorial, straight from the app.</p>
+          </div>
+          <div class="lib-chips" aria-hidden="true">
+            <span>Push-ups</span>
+            <span>Pull-ups</span>
+            <span>Plank</span>
+            <span>Squats</span>
+            <span>Burpees</span>
+            <span>Deadlift</span>
+            <span>Bench Press</span>
+            <span>Running</span>
+            <span>+70 more</span>
+          </div>
+          <a class="lib-open-btn" href="library.html" data-ar="افتح المكتبة الكاملة →">Open the full library →</a>
+        </div>
+      </div>
+      <div class="road-runner" data-journey="5" aria-hidden="true">
+        <canvas width="180" height="300"></canvas>
+      </div>
+    </section>
+
+    <!-- 7 FAQ -->
+    <section class="panel panel--faq" data-index="6">
+      <div class="panel__inner faq">
+        <div class="faq__copy">
+          <p class="kicker" data-ar="أسئلة شائعة">Questions</p>
+          <h2 data-ar="قبل أن تثبّت التطبيق.">Before you sideload.</h2>
+          <p class="body" data-ar="باختصار، أيها الصيّاد.">The short version, hunter.</p>
+        </div>
+        <div class="faq-list" id="faqList">
+          <div class="faq-item">
+            <button type="button" class="faq-q" aria-expanded="false">
+              <span data-ar="كيف أثبّت ملف APK؟">How do I install the APK?</span>
+              <span class="faq-q__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a"><p data-ar="نزّل ملف APK ثم افتحه على جهاز أندرويد. اسمح بـ &quot;التثبيت من هذا المصدر&quot; إذا طُلب منك. يتطلّب أندرويد 8.0 أو أحدث.">Download the APK, then open it on your Android device. Allow "Install from this source" if prompted. Requires Android 8.0 or newer.</p></div>
+          </div>
+          <div class="faq-item">
+            <button type="button" class="faq-q" aria-expanded="false">
+              <span data-ar="هل التثبيت الجانبي آمن؟">Is it safe to sideload?</span>
+              <span class="faq-q__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a"><p data-ar="نعم. ملف APK موقّع ونقدّمه مباشرةً منّا. قد يحذّرك جهازك لمجرّد أنه خارج متجر Play — وهذا أمر طبيعي للتثبيت المباشر.">Yes. The APK is signed and served directly by us. Your device may warn you simply because it's outside the Play Store — that's normal for direct installs.</p></div>
+          </div>
+          <div class="faq-item">
+            <button type="button" class="faq-q" aria-expanded="false">
+              <span data-ar="هل يوجد إصدار لـ iOS؟">Is there an iOS version?</span>
+              <span class="faq-q__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a"><p data-ar="ليس بعد. ‏Solo Gainz متاح على أندرويد فقط حاليًا. إصدار iOS ضمن الخطة لكن دون موعد إطلاق محدّد.">Not yet. Solo Gainz is Android-only for now. iOS is on the roadmap but has no release date.</p></div>
+          </div>
+          <div class="faq-item">
+            <button type="button" class="faq-q" aria-expanded="false">
+              <span data-ar="هل يحتاج النزال إلى الإنترنت؟">Does PVP need the internet?</span>
+              <span class="faq-q__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a"><p data-ar="لا. يجري النزال عبر شبكة الواي‑فاي / الشبكة المحلية لديك — استضِف صيّادين أو انضمّ إليهم على الشبكة ذاتها. أما بقية اللعبة فتعمل دون إنترنت تمامًا.">No. PVP runs over your local Wi‑Fi / LAN — host or join hunters on the same network. The rest of the game is fully offline.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="road-runner" data-journey="6" aria-hidden="true">
+        <canvas width="180" height="300"></canvas>
+      </div>
+    </section>
+
+    <!-- 7 FOOTER -->
+    <section class="panel panel--get" data-index="7">
+      <footer class="panel__inner site-footer">
+        <div class="site-footer__top">
+          <div class="site-footer__brand">
+            <img class="site-footer__logo" src="app_icon.png" alt="Solo Gainz app icon" />
+            <div>
+              <p class="site-footer__name">Solo Gainz</p>
+              <p class="site-footer__tag" data-ar="قتال لياقة. يعمل دون إنترنت تمامًا.">Fitness combat. Fully offline.</p>
+            </div>
+          </div>
+          <nav class="site-footer__nav" aria-label="Footer">
+            <a href="#panel-0" data-ar="الرئيسية">Home</a>
+            <a href="library.html" data-ar="مكتبة التمارين">Exercise Library</a>
+            <a href="privacy.html" data-ar="سياسة الخصوصية">Privacy Policy</a>
+            <a href="terms.html" data-ar="الشروط والأحكام">Terms &amp; Conditions</a>
+          </nav>
+        </div>
+        <div class="site-footer__divider" aria-hidden="true"></div>
+        <div class="site-footer__bottom">
+          <p class="site-footer__copy" data-ar="© 2026 Xoventic · Solo Gainz. جميع الحقوق محفوظة.">© 2026 Xoventic · Solo Gainz. All rights reserved.</p>
+          <div class="site-footer__social">
+            <a href="mailto:support@xoventic.com" data-ar="تواصل معنا">Contact</a>
+          </div>
+        </div>
+      </footer>
+      <div class="road-runner road-runner--hero" data-journey="7" aria-hidden="true">
+        <canvas width="240" height="210"></canvas>
+        <div class="rr-zzz">
+          <span class="zzz zzz--1">Z</span>
+          <span class="zzz zzz--2">Z</span>
+          <span class="zzz zzz--3">Z</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="dl-modal" id="downloadModal" role="dialog" aria-modal="true" aria-labelledby="downloadModalTitle" hidden>
+    <div class="dl-modal__backdrop" data-close></div>
+    <div class="dl-modal__panel" role="document">
+      <button class="dl-modal__close" type="button" data-close aria-label="Close">&times;</button>
+      <p class="kicker" data-ar="اختر منصّتك">Choose your platform</p>
+      <h2 id="downloadModalTitle" class="dl-modal__title" data-ar="تحميل Solo Gainz">Download Solo Gainz</h2>
+      <div class="dl-modal__options">
+        <a class="dl-option" id="androidDownload" href="https://github.com/sologainz/sologainz.github.io/releases/latest/download/Solo-Gainz.apk" download="Solo-Gainz.apk" rel="noopener">
+          <span class="dl-option__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.523 15.341a1.001 1.001 0 1 1 0-2.002 1.001 1.001 0 0 1 0 2.002m-11.046 0a1.001 1.001 0 1 1 0-2.002 1.001 1.001 0 0 1 0 2.002m11.405-6.02 1.997-3.46a.416.416 0 0 0-.152-.567.416.416 0 0 0-.568.152l-2.022 3.503A12.19 12.19 0 0 0 12 7.917c-1.837 0-3.58.4-5.137 1.032L4.84 5.446a.416.416 0 0 0-.568-.152.416.416 0 0 0-.152.567l1.997 3.46C2.686 11.185.474 14.55 0 18.5h24c-.474-3.95-2.686-7.315-6.118-9.179"/>
+            </svg>
+          </span>
+          <span class="dl-option__body">
+            <span class="dl-option__name">Android</span>
+            <span class="dl-option__meta" data-ar="‏APK · ~111 ميجابايت · أندرويد 8+">APK · ~111 MB · Android 8+</span>
+          </span>
+          <span class="dl-option__cta" data-ar="تحميل">Download</span>
+        </a>
+        <button class="dl-option dl-option--soon" type="button" disabled>
+          <span class="dl-option__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.05 12.536c-.028-2.85 2.33-4.215 2.436-4.283-1.327-1.94-3.392-2.206-4.126-2.235-1.757-.177-3.428 1.033-4.318 1.033-.888 0-2.263-1.008-3.72-.98-1.914.027-3.68 1.112-4.664 2.826-1.988 3.448-.51 8.552 1.426 11.351.945 1.37 2.07 2.909 3.546 2.854 1.423-.057 1.96-.92 3.68-.92 1.72 0 2.203.92 3.71.891 1.532-.028 2.502-1.398 3.44-2.771 1.083-1.594 1.53-3.138 1.556-3.218-.034-.015-2.985-1.147-3.015-4.549M14.27 4.11c.787-.954 1.317-2.28 1.172-3.599-1.133.046-2.507.755-3.32 1.708-.73.845-1.368 2.194-1.196 3.487 1.264.098 2.556-.642 3.344-1.596"/>
+            </svg>
+          </span>
+          <span class="dl-option__body">
+            <span class="dl-option__name">iOS</span>
+            <span class="dl-option__meta" data-ar="آيفون وآيباد">iPhone &amp; iPad</span>
+          </span>
+          <span class="dl-option__cta" data-ar="قريبًا">Coming soon</span>
+        </button>
+        <button class="dl-option dl-option--soon" type="button" disabled>
+          <span class="dl-option__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 3.449 9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+            </svg>
+          </span>
+          <span class="dl-option__body">
+            <span class="dl-option__name">Windows</span>
+            <span class="dl-option__meta" data-ar="إصدار سطح المكتب">Desktop build</span>
+          </span>
+          <span class="dl-option__cta" data-ar="قريبًا">Coming soon</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="download-site.js"></script>
+</body>
+</html>

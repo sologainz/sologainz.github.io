@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="description" content="Solo Gainz Training Library — every trainable exercise with goals and form tutorials, for home calisthenics and the full gym." />
+  <meta name="theme-color" content="#03070f" />
+  <meta name="robots" content="index, follow" />
+  <title>Training Library — Solo Gainz</title>
+  <link rel="icon" href="app_icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="download-site.css" />
+</head>
+<body class="legal lib">
+  <header class="legal-chrome">
+    <a class="legal-chrome__brand" href="index.html">
+      <span>Solo Gainz</span>
+    </a>
+    <a class="legal-chrome__back" href="index.html">Back to site</a>
+  </header>
+
+  <main class="lib-wrap">
+    <p class="legal-kicker">Training</p>
+    <h1 class="legal-title">Exercise Library</h1>
+    <p class="lib-sub">Every quest in Solo Gainz — <strong id="libCount">0</strong> exercises across home calisthenics and the full gym, each with a target and a form tutorial.</p>
+
+    <section class="bodymap" id="bodyMap">
+      <div class="bodymap__intro">
+        <h2 class="bodymap__title">Target a muscle</h2>
+        <p class="bodymap__lead">Tap a muscle on the body to instantly see every exercise that trains it.</p>
+        <div class="bodymap__views" role="group" aria-label="Body view">
+          <button type="button" data-view="front" class="is-on">Front</button>
+          <button type="button" data-view="back">Back</button>
+        </div>
+        <div class="bodymap__chips" id="bmChips">
+          <button type="button" data-muscle="chest">Chest</button>
+          <button type="button" data-muscle="back">Back</button>
+          <button type="button" data-muscle="shoulders">Shoulders</button>
+          <button type="button" data-muscle="arms">Arms</button>
+          <button type="button" data-muscle="core">Core</button>
+          <button type="button" data-muscle="legs">Legs</button>
+          <button type="button" data-muscle="glutes">Glutes</button>
+          <button type="button" data-muscle="cardio">Cardio</button>
+        </div>
+      </div>
+
+      <div class="bodymap__figure">
+        <svg class="bm-svg" data-face="front" viewBox="0 0 220 500" role="group" aria-label="Front body map">
+          <circle class="bm-body" cx="110" cy="40" r="26" />
+          <rect class="bm-body" x="98" y="62" width="24" height="18" rx="8" />
+          <g class="bm-region" data-muscle="shoulders" role="button" tabindex="0" aria-label="Shoulders">
+            <ellipse cx="63" cy="104" rx="26" ry="20" />
+            <ellipse cx="157" cy="104" rx="26" ry="20" />
+          </g>
+          <g class="bm-region" data-muscle="chest" role="button" tabindex="0" aria-label="Chest">
+            <rect x="73" y="92" width="34" height="48" rx="14" />
+            <rect x="113" y="92" width="34" height="48" rx="14" />
+          </g>
+          <g class="bm-region" data-muscle="arms" role="button" tabindex="0" aria-label="Arms">
+            <rect x="38" y="112" width="26" height="64" rx="13" />
+            <rect x="34" y="178" width="24" height="66" rx="12" />
+            <rect x="156" y="112" width="26" height="64" rx="13" />
+            <rect x="162" y="178" width="24" height="66" rx="12" />
+          </g>
+          <g class="bm-region" data-muscle="core" role="button" tabindex="0" aria-label="Core">
+            <rect x="80" y="144" width="60" height="96" rx="16" />
+          </g>
+          <g class="bm-region" data-muscle="legs" role="button" tabindex="0" aria-label="Legs">
+            <rect x="74" y="246" width="34" height="104" rx="16" />
+            <rect x="112" y="246" width="34" height="104" rx="16" />
+            <rect x="76" y="354" width="30" height="104" rx="14" />
+            <rect x="114" y="354" width="30" height="104" rx="14" />
+          </g>
+        </svg>
+
+        <svg class="bm-svg" data-face="back" viewBox="0 0 220 500" role="group" aria-label="Back body map" hidden>
+          <circle class="bm-body" cx="110" cy="40" r="26" />
+          <rect class="bm-body" x="98" y="62" width="24" height="18" rx="8" />
+          <g class="bm-region" data-muscle="shoulders" role="button" tabindex="0" aria-label="Shoulders">
+            <ellipse cx="63" cy="104" rx="26" ry="20" />
+            <ellipse cx="157" cy="104" rx="26" ry="20" />
+          </g>
+          <g class="bm-region" data-muscle="back" role="button" tabindex="0" aria-label="Back">
+            <rect x="73" y="92" width="74" height="104" rx="20" />
+          </g>
+          <g class="bm-region" data-muscle="arms" role="button" tabindex="0" aria-label="Arms">
+            <rect x="38" y="112" width="26" height="64" rx="13" />
+            <rect x="34" y="178" width="24" height="66" rx="12" />
+            <rect x="156" y="112" width="26" height="64" rx="13" />
+            <rect x="162" y="178" width="24" height="66" rx="12" />
+          </g>
+          <g class="bm-region" data-muscle="glutes" role="button" tabindex="0" aria-label="Glutes">
+            <rect x="73" y="200" width="74" height="50" rx="20" />
+          </g>
+          <g class="bm-region" data-muscle="legs" role="button" tabindex="0" aria-label="Legs">
+            <rect x="74" y="254" width="34" height="100" rx="16" />
+            <rect x="112" y="254" width="34" height="100" rx="16" />
+            <rect x="76" y="358" width="30" height="100" rx="14" />
+            <rect x="114" y="358" width="30" height="100" rx="14" />
+          </g>
+        </svg>
+
+        <p class="bm-caption" id="bmCaption">Tap a muscle to see its exercises</p>
+      </div>
+    </section>
+
+    <div class="lib-controls">
+      <div class="lib-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="libSearch" type="search" placeholder="Search exercises, muscles, or tips…" aria-label="Search exercises" />
+      </div>
+      <div class="lib-tabs" id="libTabs" role="group" aria-label="Filter">
+        <button type="button" data-filter="all" class="is-on">All</button>
+        <button type="button" data-filter="home">Home</button>
+        <button type="button" data-filter="gym">Gym</button>
+      </div>
+    </div>
+
+    <p class="lib-showing">
+      <strong id="libShown">0</strong> shown
+      <button type="button" class="bm-clear" id="bmClear" hidden>
+        <span id="bmActiveLabel"></span> ✕
+      </button>
+    </p>
+
+    <div id="libResults"></div>
+    <p id="libEmpty" class="lib-empty" hidden>No exercises match your search.</p>
+
+    <div class="legal-foot">
+      <span>© 2026 Xoventic. Solo Gainz and all related assets are the property of Xoventic. All rights reserved.</span>
+      <a href="index.html">← Back to Solo Gainz</a>
+    </div>
+  </main>
+
+  <div class="lib-modal" id="libModal" hidden>
+    <div class="lib-modal__backdrop" data-close></div>
+    <div class="lib-modal__card" role="dialog" aria-modal="true" aria-labelledby="libModalTitle">
+      <button class="lib-modal__close" type="button" data-close aria-label="Close">&times;</button>
+      <div class="lib-modal__badges" id="libModalBadges"></div>
+      <h2 class="lib-modal__title" id="libModalTitle"></h2>
+      <p class="lib-modal__group" id="libModalGroup"></p>
+
+      <h3 class="lib-modal__h">Video tutorial</h3>
+      <div class="lib-modal__video" id="libModalVideo"></div>
+
+      <h3 class="lib-modal__h">How to perform</h3>
+      <p class="lib-modal__desc" id="libModalDesc"></p>
+
+      <div class="lib-modal__actions">
+        <a class="lib-yt" id="libModalYT" href="#" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 12s0-3.9-.5-5.8a3 3 0 0 0-2.1-2.1C18.5 3.6 12 3.6 12 3.6s-6.5 0-8.4.5A3 3 0 0 0 1.5 6.2C1 8.1 1 12 1 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 8.4.5 8.4.5s6.5 0 8.4-.5a3 3 0 0 0 2.1-2.1C23 15.9 23 12 23 12ZM10 15.5v-7l6 3.5-6 3.5Z"/></svg>
+          Open on YouTube
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="library.js"></script>
+</body>
+</html>
