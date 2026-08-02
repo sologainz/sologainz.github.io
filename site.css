@@ -28,7 +28,7 @@
   --road-bottom: clamp(20px, 4.5vh, 42px);
   /* Space reserved at the bottom of every panel for the traveling hunter, so
      section content never overlaps the model. */
-  --road-lane: clamp(240px, 32vh, 380px);
+  --road-lane: clamp(180px, 24vh, 290px);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -43,7 +43,7 @@ body {
   font-family: var(--font-body);
 }
 
-/* The horizontal one‑screen landing page locks scroll; legal pages scroll normally. */
+/* The horizontal one-screen landing page locks scroll; legal pages scroll normally. */
 body.track-page {
   height: 100%;
   overflow: hidden;
@@ -202,7 +202,45 @@ html.lang-ar .site-footer__name {
   font-family: var(--font-mega);
 }
 
-/* Arabic keeps the same LTR layout — only the text and font change. */
+/* Arabic mirrors the two-column layout: text/titles sit on the right of the
+   content, visuals on the left. English keeps the original left/right order. */
+html.lang-ar .split,
+html.lang-ar .trio,
+html.lang-ar .faq,
+html.lang-ar .steps,
+html.lang-ar .trailer {
+  direction: rtl;
+}
+
+/* Right-align the copy that was explicitly left-aligned in English. */
+html.lang-ar .intro__text,
+html.lang-ar .intro__about,
+html.lang-ar .intro__about-text,
+html.lang-ar .intro__points,
+html.lang-ar .trailer__copy,
+html.lang-ar .split__copy,
+html.lang-ar .trio__copy,
+html.lang-ar .faq__copy,
+html.lang-ar .steps__copy,
+html.lang-ar .faq-q,
+html.lang-ar .faq-a > p,
+html.lang-ar .body,
+html.lang-ar .kicker,
+html.lang-ar .lead,
+html.lang-ar h2 {
+  text-align: right;
+}
+
+/* Points list markers move to the right side in Arabic. */
+html.lang-ar .intro__points li {
+  padding-left: 0;
+  padding-right: 1.55rem;
+}
+
+html.lang-ar .intro__points li::before {
+  left: auto;
+  right: 0;
+}
 
 /* ── Download modal ─────────────────────────────────────────────────────── */
 
@@ -376,26 +414,26 @@ html.lang-ar .site-footer__name {
 }
 
 .dots button {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   padding: 0;
   border: 1px solid rgba(232, 240, 255, 0.35);
   background: transparent;
-  border-radius: 2px;
+  border-radius: 0;
   cursor: pointer;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    background 0.25s ease, border-color 0.25s ease, border-radius 0.3s ease;
+    background 0.25s ease, border-color 0.25s ease;
 }
 
 .dots button:hover {
   border-color: var(--signal);
-  transform: rotate(45deg) scale(1.1);
+  transform: scale(1.15);
 }
 
 .dots button.is-active {
   background: var(--signal);
   border-color: var(--signal);
-  transform: rotate(45deg) scale(1.45);
+  transform: scale(1.4);
   animation: dot-pulse 1.8s ease-in-out infinite;
 }
 
@@ -476,7 +514,7 @@ html.lang-ar .site-footer__name {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 34%;
+  height: 24%;
   z-index: 1;
   pointer-events: none;
   background:
@@ -513,7 +551,7 @@ html.lang-ar .site-footer__name {
   position: absolute;
   bottom: var(--road-bottom);
   left: 14%;
-  width: min(70%, 480px);
+  width: min(50%, 360px);
   z-index: 3;
   transform: translate(-50%, 0);
   transition: left 0.75s cubic-bezier(0.45, 0, 0.25, 1);
@@ -532,7 +570,22 @@ html.lang-ar .site-footer__name {
 
 /* Intro hunter is a touch larger. */
 .road-runner--hero {
-  width: min(70%, 480px);
+  width: min(50%, 360px);
+}
+
+/* No hunter on the intro/hero panel — he only appears from the 2nd section on. */
+.panel--intro .road-runner {
+  display: none;
+}
+
+/* Intro panel: no ground strip or glowing line under the title. */
+.panel--intro::before,
+.panel--intro::after {
+  display: none;
+}
+
+.panel--intro .panel__inner {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
 }
 
 .road-runner.is-sprintoff {
@@ -566,6 +619,7 @@ html.lang-ar .site-footer__name {
   /* "safe" keeps content pinned below the header instead of overflowing up
      under it when a section is taller than the available height. */
   align-items: safe center;
+  justify-content: center;
 }
 
 .panel__bg {
@@ -620,12 +674,32 @@ html.lang-ar .site-footer__name {
     linear-gradient(160deg, #03070f, #081222 50%, #03070f);
 }
 
+.panel--about {
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(62, 176, 255, 0.14), transparent 55%),
+    linear-gradient(180deg, #05101f, #03070f);
+}
+
 .trailer {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.45fr);
   gap: clamp(1.5rem, 4vw, 3.5rem);
   align-items: center;
-  width: min(1180px, 92vw);
+  width: min(1320px, 94vw);
+  margin-inline: auto;
+}
+
+.panel__inner.intro,
+.panel__inner.split,
+.panel__inner.trio,
+.panel__inner.shots,
+.panel__inner.faq,
+.panel__inner.steps,
+.panel__inner.stats-wrap,
+.panel__inner.features,
+.panel__inner.get {
+  width: min(1160px, 100%);
+  margin-inline: auto;
 }
 
 .trailer__copy {
@@ -644,15 +718,20 @@ html.lang-ar .site-footer__name {
 
 .trailer__stage {
   width: 100%;
+  max-width: 960px;
+  justify-self: center;
 }
 
 .trailer__video {
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid #c8cdd6;
+  border-radius: 14px;
   background: #000;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 0 0 5px rgba(200, 205, 214, 0.14),
+    0 18px 44px rgba(0, 0, 0, 0.45);
   object-fit: contain;
 }
 
@@ -736,34 +815,23 @@ h2 {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-/* Title block sits at the top-left in normal flow — the panel's top padding
-   already clears the fixed header, so nothing overlaps it. */
 .intro__text {
   z-index: 2;
-  text-align: left;
-  max-width: min(92%, 640px);
+  text-align: center;
+  max-width: min(92%, 820px);
+  margin-inline: auto;
 }
 
-/* Title left, long-form about card right. */
-.intro__head {
-  z-index: 2;
-  width: 100%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: clamp(1.5rem, 5vw, 4rem);
-  flex-wrap: wrap;
-}
-
-/* Smaller, non-clipping intro title (the full-size .mega is used elsewhere). */
+/* Full-size hero title, centered in the middle of the page. */
 .intro__text .mega {
-  font-size: clamp(2.8rem, 8vw, 5.8rem);
-  line-height: 1.04;
-  padding-top: 0.18em;
+  font-size: clamp(4rem, 12vw, 9rem);
+  line-height: 1;
+  padding-top: 0.12em;
   overflow: visible;
 }
 
@@ -779,6 +847,23 @@ h2 {
 
 .intro__about .kicker {
   margin-bottom: 0.6rem;
+}
+
+/* ── About (separate section for the "What is Solo Gainz?" card) ────────── */
+
+.about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: safe center;
+  width: min(820px, 100%);
+  margin-inline: auto;
+}
+
+.about .intro__about {
+  flex: initial;
+  width: 100%;
+  max-width: 820px;
 }
 
 .intro__about-text {
@@ -2020,12 +2105,6 @@ h2 {
     align-self: stretch;
   }
 
-  .intro__head {
-    flex-direction: column;
-    align-items: center;
-    gap: 1.4rem;
-  }
-
   .intro__text {
     text-align: center;
     max-width: 94%;
@@ -2044,7 +2123,7 @@ h2 {
   /* Ground + hero lane sit tighter so content isn't floating above empty space. */
   :root {
     --road-bottom: clamp(12px, 2.8vh, 22px);
-    --road-lane: clamp(110px, 18vh, 168px);
+    --road-lane: clamp(90px, 15vh, 140px);
   }
 
   /* Hero: centered on the ground line, looping (no scroll-stepping on touch). */
@@ -2054,11 +2133,11 @@ h2 {
     transition: none;
   }
 
-  .road-runner { width: min(50vw, 184px); }
-  .road-runner--hero { width: min(60vw, 210px); }
+  .road-runner { width: min(38vw, 145px); }
+  .road-runner--hero { width: min(45vw, 165px); }
 
   .mega { font-size: clamp(3.1rem, 14vw, 4.8rem); }
-  .intro__text .mega { font-size: clamp(2.5rem, 12vw, 4rem); }
+  .intro__text .mega { font-size: clamp(3rem, 13vw, 4.6rem); }
 
   .shield-stage {
     width: clamp(180px, 52vw, 260px);
@@ -2140,7 +2219,7 @@ h2 {
   .chrome__apk { min-width: 4.7rem; padding: 0.48rem 0.6rem; font-size: 0.68rem; }
 
   .mega { font-size: clamp(2.7rem, 13vw, 4rem); }
-  .intro__text .mega { font-size: clamp(2.3rem, 11.5vw, 3.5rem); }
+  .intro__text .mega { font-size: clamp(2.6rem, 12vw, 3.9rem); }
   .mega--sm { font-size: clamp(2.1rem, 9.5vw, 3.1rem); }
 
   h2 { font-size: clamp(1.45rem, 6.2vw, 2.15rem); max-width: 20ch; }
@@ -2151,7 +2230,7 @@ h2 {
   }
 
   :root {
-    --road-lane: clamp(96px, 16vh, 148px);
+    --road-lane: clamp(76px, 14vh, 118px);
   }
 
   .phone-row {
@@ -2193,8 +2272,8 @@ h2 {
 }
 
 @media (max-width: 380px) {
-  .road-runner { width: min(56vw, 158px); }
-  .road-runner--hero { width: min(66vw, 178px); }
+  .road-runner { width: min(40vw, 120px); }
+  .road-runner--hero { width: min(50vw, 140px); }
   .phone--portrait { width: clamp(110px, 42vw, 150px); }
   .lead, .body, .specs li { font-size: 0.9rem; }
   .move-strip button { font-size: 0.66rem; padding: 0.55rem 0.45rem; min-width: 4.8rem; }
@@ -2218,7 +2297,7 @@ h2 {
   }
 
   :root {
-    --road-lane: clamp(88px, 26vh, 132px);
+    --road-lane: clamp(72px, 22vh, 106px);
   }
 }
 

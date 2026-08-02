@@ -237,15 +237,18 @@
   // Each section is a single "run across" leg: the hunter enters at the left
   // running, and one forward scroll runs him off to the right while the camera
   // advances to the next section — a continuous sprint toward the final panel.
-  const RUN_LEG = { scale: 4.4, stages: [{ x: "18%", anim: "run" }] };
+  // Each section gives the hunter a different in-place pose — the animations
+  // are distinct per panel (idle / punch / sprint / walk / rest) instead of
+  // every section running. `x` is ignored while he is fixed in place (JS pins
+  // him at center), but kept so the journey data stays self-documenting.
   const JOURNEY = {
-    0: RUN_LEG,
-    1: RUN_LEG,
-    2: RUN_LEG,
-    3: RUN_LEG,
-    4: RUN_LEG,
+    0: { scale: 3.2, stages: [{ x: "50%", anim: "idle" }] },
+    1: { scale: 3.2, stages: [{ x: "50%", anim: "idle" }] },
+    2: { scale: 3.2, stages: [{ x: "50%", anim: "punch" }] },
+    3: { scale: 3.2, stages: [{ x: "50%", anim: "sprint" }] },
+    4: { scale: 3.2, stages: [{ x: "50%", anim: "walk" }] },
     5: {
-      scale: 4.4,
+      scale: 3.2,
       final: true,
       stages: [{ x: "50%", anim: "stunned", sleep: true }],
     },
@@ -363,6 +366,7 @@
     }
   }
 
+
   // ── Horizontal scroller ──────────────────────────────────────────────────
   class HorizontalHunt {
     constructor(track) {
@@ -422,7 +426,7 @@
 
       t.addEventListener("scroll", () => this._onScroll(), { passive: true });
 
-      // Map mouse / trackpad wheel → sideways navigation (one panel per gesture)
+      // Map mouse / trackpad wheel ÔåÆ sideways navigation (one panel per gesture)
       let wheelLock = false;
       t.addEventListener(
         "wheel",
@@ -480,7 +484,7 @@
     }
 
     // One scroll/arrow step: walk the hunter to the next waypoint inside the
-    // section, or — once the section's journey is done — dash off and pan over.
+    // section, or ÔÇö once the section's journey is done ÔÇö dash off and pan over.
     step(dir) {
       if (this._busy) return;
       const cfg = this._journey[this.index];
@@ -568,6 +572,7 @@
       }
     }
   }
+
 
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -811,65 +816,30 @@
       // hijacking, no snap fighting). Just animate each hunter in place.
       setupVerticalMode(heroes);
     } else if (track) {
-      // Desktop: cinematic horizontal scroll with the multi-stage hero journey.
+      // Desktop: horizontal scroll, left to right, one panel per gesture.
+      // The hunter stays FIXED in place, centered on the ground line, looping
+      // his run while the sections slide past — he never travels the ground.
       const hunt = new HorizontalHunt(track);
       hunt._journey = JOURNEY;
 
-      // Where the hunter starts each run: just off the left edge, so he keeps
-      // running in from the previous section instead of teleporting into place.
-      const ENTER_X = "-10%";
-
-      hunt._onStage = (index, stage, instant) => {
+      hunt._onStage = (index, stage) => {
         const cfg = JOURNEY[index];
         const hero = heroes[index];
         if (!cfg || !hero) return;
         const i = Math.max(0, Math.min(cfg.stages.length - 1, stage));
         const st = cfg.stages[i];
-        hero.el.classList.remove("is-sprintoff");
         clearTimeout(hero._settleT);
-
-        if (instant) {
-          // A fresh section: drop the hunter just off the left edge (no slide),
-          // then let him RUN IN to his mark — a seamless hand-off from the
-          // section he just sprinted out of. Nothing ever teleports mid-screen.
-          hero.el.classList.remove("is-sleeping");
-          hero.sprite.play("run", { loop: true }).catch(() => {});
-          hero.el.style.transition = "none";
-          hero.el.style.left = ENTER_X;
-          void hero.el.offsetWidth;
-          hero.el.style.transition = "";
-          requestAnimationFrame(() => {
-            hero.el.style.left = st.x;
-          });
-          // Once he has arrived, settle into the section's real pose (e.g. the
-          // final section stops to sleep). Timed to the `left` transition.
-          hero._settleT = setTimeout(() => {
-            hero.el.classList.toggle("is-sleeping", !!st.sleep);
-            hero.sprite.play(st.anim, { loop: st.loop !== false }).catch(() => {});
-          }, 820);
-        } else {
-          hero.el.classList.toggle("is-sleeping", !!st.sleep);
-          hero.el.style.left = st.x;
-          hero.sprite.play(st.anim, { loop: st.loop !== false }).catch(() => {});
-        }
+        hero.el.classList.remove("is-sprintoff");
+        hero.el.style.transition = "none";
+        hero.el.style.left = "50%";
+        hero.el.classList.toggle("is-sleeping", !!st.sleep);
+        hero.sprite.play(st.anim, { loop: st.loop !== false }).catch(() => {});
       };
 
-      hunt._onExit = (index) =>
-        new Promise((resolve) => {
-          const hero = heroes[index];
-          if (!hero) {
-            resolve();
-            return;
-          }
-          // Run flat-out across and off the right edge; only once he clears the
-          // screen does the camera advance to the next section.
-          clearTimeout(hero._settleT);
-          hero.sprite.play("run").catch(() => {});
-          hero.el.classList.add("is-sprintoff");
-          setTimeout(resolve, 720);
-        });
+      // Fixed in place — no sprint-off exit; pan straight to the next section.
+      hunt._onExit = () => Promise.resolve();
 
-      // Render the current section's opening stage (snapped into place).
+      // Render the current section's opening pose (snapped into place).
       hunt._applyStage(true);
     }
 
