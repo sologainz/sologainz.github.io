@@ -145,14 +145,40 @@
       `how to do ${name} proper form tutorial`
     )}`;
 
+  // Muscle-group glyphs keep the grid scannable — every card carries a mark
+  // for what it trains instead of being an undifferentiated block of text.
+  const GROUP_GLYPH = {
+    chest: "M4 7h16v4a4 4 0 0 1-4 4h-2l-2 2-2-2H8a4 4 0 0 1-4-4z",
+    back: "M12 3l4 3v6l-4 9-4-9V6z",
+    shoulders: "M3 15a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v3H3z",
+    arms: "M6 4h4v7a4 4 0 0 0 8 0V8h2v3a6 6 0 0 1-12 0V6H6z",
+    core: "M6 4h12v6a6 6 0 0 1-12 0zM6 12h12v4a6 6 0 0 1-12 0z",
+    legs: "M8 3h8l-1 8-1 10h-3l-1-10-2-8z",
+    glutes: "M5 9a4 4 0 0 1 8 0 4 4 0 0 0 6 3v6H5z",
+    cardio: "M3 12h4l2-5 3 10 2-5h7",
+    full: "M12 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM5 10h14M12 8v9M8 21l4-4 4 4",
+  };
+
+  const glyphFor = (grp = "") => {
+    const g = grp.toLowerCase();
+    const key =
+      Object.keys(GROUP_GLYPH).find((k) => g.includes(k)) || "full";
+    return GROUP_GLYPH[key];
+  };
+
   const cardHTML = (e) => {
     return `<article class="lib-card" data-name="${esc(e.n)}" role="button" tabindex="0" aria-label="${esc(e.n)} — view form and video">
-        <div class="lib-card__head">
-          <h3>${esc(e.n)}</h3>
-          <div class="lib-card__badges">${badgesHTML(e)}</div>
+        <span class="lib-card__glyph" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="${glyphFor(e.grp)}"/></svg>
+        </span>
+        <div class="lib-card__body">
+          <div class="lib-card__head">
+            <h3>${esc(e.n)}</h3>
+            <div class="lib-card__badges">${badgesHTML(e)}</div>
+          </div>
+          <p>${esc(e.desc)}</p>
+          <span class="lib-card__more">View form &amp; video →</span>
         </div>
-        <p>${esc(e.desc)}</p>
-        <span class="lib-card__more">View form &amp; video →</span>
       </article>`;
   };
 
@@ -502,7 +528,7 @@
 
     mVideo.classList.remove("is-empty");
     // YouTube facade: light for GitHub Pages (no 600MB+ of local MP4s).
-    // Click-to-load keeps the page fast until the hunter wants a tutorial.
+    // Click-to-load keeps the page fast until the prototype wants a tutorial.
     mVideo.innerHTML = ytFacade(id, e.n);
   };
 

@@ -116,6 +116,24 @@
         "media/player/stunned/Stunned07.png",
       ],
     },
+    shockLight: {
+      fps: 10,
+      frames: [
+        "media/player/shocklight/ShockLight01.png",
+        "media/player/shocklight/ShockLight02.png",
+        "media/player/shocklight/ShockLight03.png",
+        "media/player/shocklight/ShockLight04.png",
+      ],
+    },
+    shockHeavy: {
+      fps: 10,
+      frames: [
+        "media/player/shockheavy/ShockHeavy01.png",
+        "media/player/shockheavy/ShockHeavy02.png",
+        "media/player/shockheavy/ShockHeavy03.png",
+        "media/player/shockheavy/ShockHeavy04.png",
+      ],
+    },
     hit: {
       fps: 10,
       frames: [
@@ -230,27 +248,24 @@
   const cache = new Map();
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Per-section hunter journey. Each stage is one forward scroll step
-  // ({ x: road position, anim }). Sections 0–4 take four steps and then a
-  // sprint-off to the next section; the final section walks to the centre of
-  // the road and falls asleep with a "Zzz".
-  // Each section is a single "run across" leg: the hunter enters at the left
+  // Per-section prototype journey. Each stage is one forward scroll step
+  // ({ x: road position, anim }). The final section remains animated instead
+  // of settling into the old sleeping state.
+  // Each section is a single "run across" leg: the prototype enters at the left
   // running, and one forward scroll runs him off to the right while the camera
   // advances to the next section — a continuous sprint toward the final panel.
-  // Each section gives the hunter a different in-place pose — the animations
-  // are distinct per panel (idle / punch / sprint / walk / rest) instead of
-  // every section running. `x` is ignored while he is fixed in place (JS pins
-  // him at center), but kept so the journey data stays self-documenting.
+  // `x` is ignored while the prototype is fixed in place (JS pins him at
+  // center), but kept so the journey data stays self-documenting.
+  // One pose per section, in reading order:
+  // 0 intro · 1 trailer · 2 faq · 3 footer.
   const JOURNEY = {
-    0: { scale: 3.2, stages: [{ x: "50%", anim: "idle" }] },
-    1: { scale: 3.2, stages: [{ x: "50%", anim: "idle" }] },
-    2: { scale: 3.2, stages: [{ x: "50%", anim: "punch" }] },
-    3: { scale: 3.2, stages: [{ x: "50%", anim: "sprint" }] },
-    4: { scale: 3.2, stages: [{ x: "50%", anim: "walk" }] },
-    5: {
-      scale: 3.2,
+    0: { scale: 2.2, stages: [{ x: "50%", anim: "idle" }] },
+    1: { scale: 2.2, stages: [{ x: "50%", anim: "idle" }] },
+    2: { scale: 2.2, stages: [{ x: "50%", anim: "idle" }] },
+    3: {
+      scale: 2.2,
       final: true,
-      stages: [{ x: "50%", anim: "stunned", sleep: true }],
+      stages: [{ x: "50%", anim: "idle" }],
     },
   };
 
@@ -378,7 +393,7 @@
       this.index = 0;
       this._prevIndex = 0;
       this._busy = false;
-      // The hunter walks a multi-step journey inside each section. `stage` is
+      // The prototype walks a multi-step journey inside each section. `stage` is
       // the current step within the active section; each forward scroll bumps
       // it, and only once the last stage is passed does the camera advance.
       this.stage = 0;
@@ -483,7 +498,7 @@
       );
     }
 
-    // One scroll/arrow step: walk the hunter to the next waypoint inside the
+    // One scroll/arrow step: walk the prototype to the next waypoint inside the
     // section, or ÔÇö once the section's journey is done ÔÇö dash off and pan over.
     step(dir) {
       if (this._busy) return;
@@ -503,7 +518,7 @@
         return;
       }
 
-      // Backward: step the hunter back, or retreat to the previous section.
+      // Backward: step the prototype back, or retreat to the previous section.
       if (cfg && this.stage > 0) {
         this.stage -= 1;
         this._applyStage();
@@ -539,7 +554,11 @@
     }
 
     _scrollTo(next) {
-      this.panels[next].scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", inline: "start", block: "nearest" });
+      this.track.scrollTo({
+        left: next * this.track.clientWidth,
+        top: 0,
+        behavior: reduceMotion ? "auto" : "smooth",
+      });
     }
 
     _onScroll() {
@@ -551,7 +570,7 @@
       const idx = Math.round(t.scrollLeft / t.clientWidth);
       this.index = Math.max(0, Math.min(this.panels.length - 1, idx));
 
-      // Entering a new section: snap the hunter to its first mark instantly.
+      // Entering a new section: snap the prototype to its first mark instantly.
       if (this.index !== this._prevIndex) {
         this.stage = 0;
         this._applyStage(true);
@@ -566,6 +585,9 @@
         [...this.dots.children].forEach((d, i) => d.classList.toggle("is-active", i === this.index));
       }
 
+      // Drives the staggered content reveal for the panel you're looking at.
+      this.panels.forEach((p, i) => p.classList.toggle("is-active", i === this.index));
+
       if (!this._hintHidden && t.scrollLeft > 24 && this.hint) {
         this._hintHidden = true;
         this.hint.classList.add("is-gone");
@@ -576,11 +598,11 @@
 
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  // ── Solo training arena (single hunter drilling strikes, no opponent) ─────
+  // ── Solo training arena (single prototype drilling strikes, no opponent) ─────
   class Arena {
     constructor(root) {
       this.root = root;
-      // Solo hunter drilling strikes in place, centered (camera stays fixed).
+      // Solo prototype drilling strikes in place, centered (camera stays fixed).
       this.a = this._make(
         root.querySelector('[data-fighter="a"]'),
         root.querySelector('[data-shadow="a"]'),
@@ -624,7 +646,7 @@
       await f.sp.play("idle").catch(() => {});
       if (reduceMotion) return;
 
-      // Solo training loop — the hunter drills strikes in place, no opponent.
+      // Solo training loop — the prototype drills strikes in place, no opponent.
       const combo = ["punch", "kick", "punch3", "kick2", "kick3", "throw"];
       let i = 0;
       for (;;) {
@@ -637,7 +659,7 @@
     }
   }
 
-  // Vertical (mobile / touch) mode: no scroll hijacking. Each section's hunter
+  // Vertical (mobile / touch) mode: no scroll hijacking. Each section's prototype
   // simply loops its opening animation, centered on the ground line, and only
   // animates while its section is on screen (battery-friendly).
   function setupVerticalMode(heroes) {
@@ -650,7 +672,7 @@
       hero.el.classList.remove("is-sprintoff");
       hero.el.classList.toggle("is-sleeping", !!(st && st.sleep));
       hero._anim = st ? st.anim : "idle";
-      // Kick off every hunter immediately so a frame is always painted — even
+      // Kick off every prototype immediately so a frame is always painted — even
       // for sections whose ground line sits far down a tall panel. Without this
       // the middle sections could stay blank until (if ever) fully scrolled to.
       hero.sprite.play(hero._anim, { loop: true }).catch(() => {});
@@ -671,7 +693,7 @@
             }
           });
         },
-        // Generous margin so a hunter is running well before its ground line
+        // Generous margin so a prototype is running well before its ground line
         // scrolls into view (and keeps running just after it leaves).
         { threshold: 0, rootMargin: "300px 0px 300px 0px" }
       );
@@ -691,6 +713,74 @@
       window.addEventListener("resize", upd, { passive: true });
       upd();
     }
+  }
+
+  function setupFinalShockReaction(heroes) {
+    const finalIndex = String(Object.keys(JOURNEY).length - 1);
+    const hero = heroes[finalIndex];
+    if (!hero) return;
+    const canvas = hero.el.querySelector("canvas");
+    if (!canvas) return;
+
+    hero.el.style.pointerEvents = "auto";
+    canvas.style.pointerEvents = "auto";
+    canvas.style.cursor = "pointer";
+
+    let shocked = false;
+    let activeShock = "";
+    let settleTimer = 0;
+    let cooldownUntil = 0;
+    const COOLDOWN_MS = 900;
+    const setAnimation = (key) => {
+      hero._anim = key;
+      hero.sprite.play(key, { loop: true }).catch(() => {});
+    };
+
+    const isOnModel = (event) => {
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return false;
+      const x = Math.floor((event.clientX - rect.left) * canvas.width / rect.width);
+      const y = Math.floor((event.clientY - rect.top) * canvas.height / rect.height);
+      if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) return false;
+
+      // Check a small neighborhood so thin pixel-art limbs still respond.
+      const left = Math.max(0, x - 1);
+      const top = Math.max(0, y - 1);
+      const width = Math.min(canvas.width - left, 3);
+      const height = Math.min(canvas.height - top, 3);
+      const pixels = canvas.getContext("2d").getImageData(left, top, width, height).data;
+      for (let i = 3; i < pixels.length; i += 4) {
+        if (pixels[i] > 24) return true;
+      }
+      return false;
+    };
+
+    const trigger = (key) => {
+      const now = performance.now();
+      if (now < cooldownUntil) return;
+      cooldownUntil = now + COOLDOWN_MS;
+      clearTimeout(settleTimer);
+      if (!shocked || activeShock !== key) {
+        shocked = true;
+        activeShock = key;
+        setAnimation(key);
+      }
+      settleTimer = setTimeout(() => {
+        shocked = false;
+        activeShock = "";
+        setAnimation("idle");
+      }, 700);
+    };
+
+    canvas.addEventListener("pointermove", (event) => {
+      if (isOnModel(event)) trigger("shockLight");
+    }, { passive: true });
+    canvas.addEventListener("pointerdown", (event) => {
+      if (event.button !== 2 || !isOnModel(event)) return;
+      event.preventDefault();
+      trigger("shockHeavy");
+    });
+    canvas.addEventListener("contextmenu", (event) => event.preventDefault());
   }
 
   function setupLanguage() {
@@ -759,6 +849,15 @@
 
     btn.addEventListener("click", open);
 
+    // Any in-page CTA can raise the same modal (hero, install steps, footer)
+    // instead of each one duplicating the platform list.
+    document.querySelectorAll("[data-download-open]").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        open();
+      });
+    });
+
     modal.querySelectorAll("[data-close]").forEach((el) => {
       el.addEventListener("click", close);
     });
@@ -772,12 +871,179 @@
     });
   }
 
+  // ── Live community stats (section 5) ───────────────────────────────────────
+  // Backed by public.public_live_stats() — an aggregate-only Postgres function
+  // granted to `anon` (supabase/migrations/0022_public_live_stats.sql).
+  //
+  // The publishable key is safe to ship in a static bundle: every table sits
+  // behind RLS, and this RPC is the only thing anon may call that reads them.
+  // It takes no arguments and returns nothing per-user, so the endpoint cannot
+  // be turned into a "is player X online?" oracle.
+  const LIVE = {
+    url: "https://oschpozvdrdpjlsgadgl.supabase.co/rest/v1/rpc/public_live_stats",
+    key: "sb_publishable_QwU5OjJzlQY2RwnJ5q9XXw_olcDysTU",
+    refreshMs: 60000,
+    timeoutMs: 8000,
+  };
+
+  // Compact above 10k so a big community never blows out the stat row.
+  const fmtCount = (n) => {
+    if (!Number.isFinite(n)) return "—";
+    if (n >= 1000000) return `${(n / 1000000).toFixed(n >= 10000000 ? 0 : 1)}M`;
+    if (n >= 10000) return `${(n / 1000).toFixed(n >= 100000 ? 0 : 1)}k`;
+    return n.toLocaleString("en-US");
+  };
+
+  const countUp = (el, target) => {
+    if (!el) return;
+    const from = parseInt(String(el.dataset.raw || "0"), 10) || 0;
+    el.dataset.raw = String(target);
+    if (reduceMotion || document.hidden || from === target) {
+      el.textContent = fmtCount(target);
+      return;
+    }
+    const dur = 900;
+    const t0 = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - t0) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmtCount(Math.round(from + (target - from) * eased));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+    // A throttled or non-compositing tab can report visible and still never
+    // service requestAnimationFrame, which would strand the figure on its "—"
+    // placeholder forever. Land on the real number either way.
+    clearTimeout(el._settle);
+    el._settle = setTimeout(() => {
+      if (el.dataset.raw === String(target)) el.textContent = fmtCount(target);
+    }, dur + 300);
+  };
+
+  function setupLiveStats() {
+    const sheet = document.getElementById("liveSheet");
+    if (!sheet) return;
+
+    const statusEl = document.getElementById("liveStatus");
+    const barsEl = document.getElementById("liveBars");
+    const peakEl = document.getElementById("livePeak");
+    const fields = {
+      online: document.getElementById("statOnline"),
+      hunters: document.getElementById("statHunters"),
+      active: document.getElementById("statActive"),
+      volume: document.getElementById("statVolume"),
+    };
+
+    const DAY_INITIAL = ["S", "M", "T", "W", "T", "F", "S"];
+
+    // Status text has to survive the EN/AR toggle, so write both faces the way
+    // setupLanguage() expects and let it re-render on switch.
+    const setStatus = (en, ar) => {
+      if (!statusEl) return;
+      statusEl.dataset.ar = ar;
+      statusEl.dataset.en = en;
+      statusEl.textContent =
+        document.documentElement.lang === "ar" ? ar : en;
+    };
+
+    const paintBars = (days) => {
+      if (!barsEl || !Array.isArray(days) || !days.length) return;
+      const peak = Math.max(1, ...days.map((d) => Number(d.sessions) || 0));
+      barsEl.innerHTML = days
+        .map((d, i) => {
+          const v = Number(d.sessions) || 0;
+          const pct = Math.round((v / peak) * 100);
+          const last = i === days.length - 1;
+          const dow = new Date(`${d.day}T00:00:00Z`).getUTCDay();
+          const initial = DAY_INITIAL[Number.isNaN(dow) ? i % 7 : dow];
+          return (
+            `<div class="live-bar${last ? " is-today" : ""}" title="${d.day}: ${v} sessions">` +
+            `<span class="live-bar__fill" style="--h:${Math.max(pct, 2)}%"></span>` +
+            `<span class="live-bar__day">${initial}</span>` +
+            `</div>`
+          );
+        })
+        .join("");
+      if (peakEl) peakEl.textContent = `peak ${fmtCount(peak)}`;
+    };
+
+    const apply = (data) => {
+      countUp(fields.online, Number(data.online_now) || 0);
+      countUp(fields.hunters, Number(data.hunters) || 0);
+      countUp(fields.active, Number(data.active_7d) || 0);
+      countUp(fields.volume, Number(data.volume_7d) || 0);
+      paintBars(data.days);
+      sheet.dataset.state = "live";
+      setStatus("live · updates every minute", "مباشر · يتحدّث كل دقيقة");
+    };
+
+    const fail = () => {
+      sheet.dataset.state = "offline";
+      setStatus("live numbers unavailable", "الأرقام المباشرة غير متاحة");
+    };
+
+    let inFlight = false;
+    const pull = async () => {
+      if (inFlight) return;
+      inFlight = true;
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), LIVE.timeoutMs);
+      try {
+        const res = await fetch(LIVE.url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: LIVE.key,
+            Authorization: `Bearer ${LIVE.key}`,
+          },
+          body: "{}",
+          signal: ctrl.signal,
+        });
+        if (!res.ok) throw new Error(`rpc ${res.status}`);
+        const data = await res.json();
+        if (!data || typeof data !== "object") throw new Error("bad payload");
+        apply(data);
+      } catch (_) {
+        // Offline, RPC not deployed yet, or blocked — the section keeps its
+        // copy and simply says so rather than showing a wall of dashes.
+        if (sheet.dataset.state !== "live") fail();
+      } finally {
+        clearTimeout(timer);
+        inFlight = false;
+      }
+    };
+
+    pull();
+
+    // Only poll while the tab is actually being looked at.
+    let timer = 0;
+    const start = () => {
+      if (timer) return;
+      timer = setInterval(() => {
+        if (!document.hidden) pull();
+      }, LIVE.refreshMs);
+    };
+    const stop = () => {
+      clearInterval(timer);
+      timer = 0;
+    };
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stop();
+      else {
+        pull();
+        start();
+      }
+    });
+    start();
+  }
+
   async function boot() {
     setupLanguage();
     setupDownloadModal();
+    setupLiveStats();
 
     const modeQuery = window.matchMedia("(max-width: 900px), (pointer: coarse)");
-    const mobile = modeQuery.matches;
+    const mobile = window.innerWidth <= 900 || modeQuery.matches;
 
     // If the layout mode flips (e.g. a desktop window resized past the
     // breakpoint), re-initialise cleanly so neither rig is ever half-wired.
@@ -796,7 +1062,7 @@
 
     const track = document.getElementById("track");
 
-    // Build the traveling hunter sprite for every section up front.
+    // Build the traveling prototype sprite for every section up front.
     const heroes = {};
     if (track) {
       document.querySelectorAll(".road-runner[data-journey]").forEach((el) => {
@@ -813,11 +1079,11 @@
 
     if (track && mobile) {
       // Native vertical scroll — do NOT construct HorizontalHunt (no wheel/touch
-      // hijacking, no snap fighting). Just animate each hunter in place.
+      // hijacking, no snap fighting). Just animate each prototype in place.
       setupVerticalMode(heroes);
     } else if (track) {
       // Desktop: horizontal scroll, left to right, one panel per gesture.
-      // The hunter stays FIXED in place, centered on the ground line, looping
+      // The prototype stays FIXED in place, centered on the ground line, looping
       // his run while the sections slide past — he never travels the ground.
       const hunt = new HorizontalHunt(track);
       hunt._journey = JOURNEY;
@@ -842,6 +1108,8 @@
       // Render the current section's opening pose (snapped into place).
       hunt._applyStage(true);
     }
+
+    setupFinalShockReaction(heroes);
 
     // Auto‑battle arena (section 4)
     const arenaEl = document.getElementById("arena");
@@ -880,6 +1148,46 @@
         }
       };
 
+      // Ladder under the shield: every rank, where you are, how far it goes.
+      const ladder = document.getElementById("rankLadder");
+      const fill = document.getElementById("rankFill");
+      const rankName = document.getElementById("rankName");
+      const pips = [];
+      if (ladder) {
+        ranks.forEach((r, i) => {
+          const pip = document.createElement("button");
+          pip.type = "button";
+          pip.className = "rank-pip";
+          pip.setAttribute("role", "listitem");
+          pip.setAttribute("aria-label", `${r} rank`);
+          pip.textContent = r;
+          pip.addEventListener("click", () => showRank(i));
+          ladder.appendChild(pip);
+          pips.push(pip);
+        });
+      }
+
+      const paintLadder = () => {
+        pips.forEach((p, i) => {
+          p.classList.toggle("is-current", i === si);
+          p.classList.toggle("is-done", i < si);
+        });
+        if (fill) {
+          fill.style.width = `${(si / (ranks.length - 1)) * 100}%`;
+        }
+        if (rankName) rankName.textContent = ranks[si];
+      };
+
+      const showRank = (i) => {
+        si = ((i % ranks.length) + ranks.length) % ranks.length;
+        shieldMain.src = shields[si];
+        shieldMain.classList.remove("is-gone");
+        shieldBack.src = shields[(si + 1) % shields.length];
+        paintLadder();
+      };
+
+      paintLadder();
+
       if (!reduceMotion) {
         (async () => {
           for (;;) {
@@ -892,10 +1200,7 @@
             shieldShards.classList.remove("is-breaking");
             shieldShards.innerHTML = "";
             // Promote the revealed shield to the front, stage the following one behind.
-            si = (si + 1) % shields.length;
-            shieldMain.src = shields[si];
-            shieldMain.classList.remove("is-gone");
-            shieldBack.src = shields[(si + 1) % shields.length];
+            showRank(si + 1);
             await wait(60);
           }
         })();

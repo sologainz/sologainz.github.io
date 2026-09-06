@@ -6,15 +6,17 @@
 }
 
 :root {
-  --void: #03070f;
-  --ink: #07111f;
-  --steel: #0e1a2e;
-  --line: rgba(232, 240, 255, 0.12);
-  --text: #e8f0ff;
-  --mute: rgba(232, 240, 255, 0.62);
-  --faint: rgba(232, 240, 255, 0.38);
-  --signal: #3eb0ff;
-  --signal-deep: #1578d4;
+  /* Shared with the app and the control board: one blue, one ground, so the
+     three faces of Solo Gainz do not each invent their own. */
+  --void: #071426;
+  --ink: #0c2038;
+  --steel: #122c4a;
+  --line: rgba(238, 242, 255, 0.15);
+  --text: #eef2ff;
+  --mute: rgba(238, 242, 255, 0.66);
+  --faint: rgba(238, 242, 255, 0.4);
+  --signal: #42a5f5;
+  --signal-deep: #2196f3;
   --heat: #ffb03a;
   --brick: #4a1f1f;
   --font-mega: "Tenada", "Space Grotesk", system-ui, sans-serif;
@@ -26,7 +28,7 @@
   --chrome-h: 64px;
   /* Ground line sits low, near the panel bottom; characters anchor to it. */
   --road-bottom: clamp(20px, 4.5vh, 42px);
-  /* Space reserved at the bottom of every panel for the traveling hunter, so
+  /* Space reserved at the bottom of every panel for the traveling prototype, so
      section content never overlaps the model. */
   --road-lane: clamp(180px, 24vh, 290px);
 }
@@ -506,21 +508,10 @@ html.lang-ar .intro__points li::before {
   isolation: isolate;
 }
 
-/* Shared arena floor/wall strip the hunter runs against — same on every
+/* Shared arena floor/wall strip the prototype runs against — same on every
    section (mirrors the intro arena). */
 .panel::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 24%;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, transparent, rgba(3, 7, 15, 0.85)),
-    repeating-linear-gradient(90deg, rgba(232, 240, 255, 0.04) 0 2px, transparent 2px 36px);
-  border-top: 1px solid rgba(62, 176, 255, 0.22);
+  display: none;
 }
 
 /* Continuous glowing ground line across every section. */
@@ -544,7 +535,7 @@ html.lang-ar .intro__points li::before {
     0 0 40px rgba(62, 176, 255, 0.2);
 }
 
-/* The hunter that travels the road through each section. It walks smoothly
+/* The prototype that travels the road through each section. It walks smoothly
    between waypoints (animated `left`); the sprint-off exit animates transform.
    Entering a section repositions instantly (transition disabled in JS). */
 .road-runner {
@@ -568,12 +559,12 @@ html.lang-ar .intro__points li::before {
   filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.5));
 }
 
-/* Intro hunter is a touch larger. */
+/* Intro prototype is a touch larger. */
 .road-runner--hero {
   width: min(50%, 360px);
 }
 
-/* No hunter on the intro/hero panel — he only appears from the 2nd section on. */
+/* No prototype on the intro/hero panel — he only appears from the 2nd section on. */
 .panel--intro .road-runner {
   display: none;
 }
@@ -595,7 +586,7 @@ html.lang-ar .intro__points li::before {
   opacity: 0;
 }
 
-/* Sleep "Zzz" for the final resting hunter. */
+/* Sleep "Zzz" for the final resting prototype. */
 .rr-zzz {
   position: absolute;
   inset: 0;
@@ -1251,7 +1242,7 @@ h2 {
   filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.5));
 }
 
-/* The landscape frame is short, so let the hunter use more of its height. */
+/* The landscape frame is short, so let the prototype use more of its height. */
 .phone--landscape .phone__screen canvas {
   max-width: 40%;
   max-height: 88%;
@@ -1435,7 +1426,7 @@ h2 {
   filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.45));
 }
 
-/* Sleep "Zzz" rising from the resting hunter — mirrors the app's night home screen. */
+/* Sleep "Zzz" rising from the resting prototype — mirrors the app's night home screen. */
 .zzz {
   position: absolute;
   top: 48%;
@@ -2298,6 +2289,155 @@ h2 {
 
   :root {
     --road-lane: clamp(72px, 22vh, 106px);
+  }
+}
+
+/* Compact Android phones: keep every active panel readable without sideways
+   overflow, while leaving the desktop cinema layout untouched. */
+@media (max-width: 600px) {
+  :root {
+    --chrome-h: 56px;
+    --road-lane: 82px;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .chrome {
+    display: none;
+  }
+
+  .track > .panel:not(.panel--get) {
+    display: none;
+  }
+
+  .chrome {
+    height: var(--chrome-h);
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem;
+    padding-inline: max(0.75rem, env(safe-area-inset-left, 0px))
+      max(0.75rem, env(safe-area-inset-right, 0px));
+  }
+
+  .chrome__brand {
+    min-width: 0;
+    font-size: 0.95rem;
+  }
+
+  .chrome__brand span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .chrome__actions {
+    gap: 0.35rem;
+  }
+
+  .chrome__lang,
+  .chrome__apk {
+    min-width: 0;
+    min-height: 38px;
+    padding: 0.5rem 0.65rem;
+    font-size: 0.68rem;
+  }
+
+  .panel__inner {
+    min-height: 100svh;
+    padding-top: calc(var(--chrome-h) + 1rem + env(safe-area-inset-top, 0px));
+    padding-right: max(1rem, env(safe-area-inset-right, 0px));
+    padding-bottom: calc(var(--road-lane) + 1rem + env(safe-area-inset-bottom, 0px));
+    padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  }
+
+  .mega {
+    font-size: 3.8rem;
+    line-height: 0.95;
+  }
+
+  .road-runner,
+  .panel--intro .road-runner {
+    display: none;
+  }
+
+  .panel--intro .mega {
+    background: none;
+    color: #eef2ff;
+    -webkit-text-fill-color: #eef2ff;
+  }
+
+  .panel--intro .intro {
+    justify-content: flex-start;
+    padding-top: calc(4rem + env(safe-area-inset-top, 0px));
+  }
+
+  .site-footer__download {
+    width: min(100%, 18rem);
+    justify-content: center;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    line-height: 1.08;
+  }
+
+  .body,
+  .faq-a > p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .trailer {
+    gap: 1.25rem;
+  }
+
+  .trailer__copy,
+  .faq__copy {
+    width: 100%;
+  }
+
+  .trailer__stage {
+    width: 100%;
+  }
+
+  .trailer__video {
+    display: block;
+    width: 100%;
+    max-height: 42svh;
+    object-fit: contain;
+  }
+
+  .faq {
+    gap: 1rem;
+  }
+
+  .faq-list {
+    width: 100%;
+  }
+
+  .faq-q {
+    min-height: 48px;
+    padding: 0.8rem 0.9rem;
+    font-size: 0.86rem;
+  }
+
+  .site-footer {
+    padding-top: calc(var(--chrome-h) + 1rem + env(safe-area-inset-top, 0px));
+  }
+
+  .site-footer__nav a {
+    font-size: 0.84rem;
+  }
+
+  .road-runner {
+    width: min(32vw, 112px);
+  }
+
+  .road-runner--hero {
+    width: min(38vw, 132px);
   }
 }
 
@@ -3221,4 +3361,861 @@ body.lib-modal-open { overflow: hidden; }
   .lib-controls { top: calc(var(--chrome-h) - 8px); }
   .lib-tabs { width: 100%; justify-content: space-between; }
   .lib-tabs button { flex: 1; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   HERO CTA · TRUST · SCROLL CUE
+   The hero previously had no call to action at all — the only download
+   entry point was the small chrome button.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 auto 1.1rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.hero-badge__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3dff8a;
+  box-shadow: 0 0 0 0 rgba(61, 255, 138, 0.6);
+  animation: pulseDot 2.4s ease-out infinite;
+}
+
+@keyframes pulseDot {
+  0% { box-shadow: 0 0 0 0 rgba(61, 255, 138, 0.55); }
+  70% { box-shadow: 0 0 0 9px rgba(61, 255, 138, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(61, 255, 138, 0); }
+}
+
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(1.4rem, 3.5vh, 2.2rem);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.95rem 1.6rem;
+  border: 0;
+  border-radius: 14px;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+}
+
+.btn svg { width: 1.1rem; height: 1.1rem; flex: none; }
+
+.btn--primary {
+  color: #04121f;
+  background: linear-gradient(135deg, #7cd0ff, var(--signal));
+  box-shadow: 0 14px 34px rgba(62, 176, 255, 0.32);
+}
+
+.btn--primary:hover,
+.btn--primary:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 44px rgba(62, 176, 255, 0.44);
+}
+
+.btn--ghost {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+}
+
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(62, 176, 255, 0.45);
+}
+
+.btn:active { transform: translateY(0) scale(0.98); }
+
+.hero-trust {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem 1.35rem;
+  margin: clamp(1rem, 2.5vh, 1.5rem) 0 0;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--faint);
+}
+
+.hero-trust li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.hero-trust li::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--signal);
+  opacity: 0.85;
+}
+
+.scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--road-lane) - clamp(30px, 5vh, 52px));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--faint);
+  pointer-events: none;
+}
+
+.scroll-cue__arrow {
+  position: relative;
+  width: 44px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(232, 240, 255, 0.05), var(--signal));
+}
+
+.scroll-cue__arrow::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid var(--signal);
+  border-right: 1px solid var(--signal);
+  transform: rotate(45deg);
+  animation: cueNudge 1.9s ease-in-out infinite;
+}
+
+@keyframes cueNudge {
+  0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 0.5; }
+  50% { transform: rotate(45deg) translate(3px, -3px); opacity: 1; }
+}
+
+html.lang-ar .scroll-cue__arrow {
+  background: linear-gradient(270deg, rgba(232, 240, 255, 0.05), var(--signal));
+}
+html.lang-ar .scroll-cue__arrow::after {
+  right: auto;
+  left: -1px;
+  transform: rotate(-135deg);
+}
+
+/* ── Scroll reveal ───────────────────────────────────────────────────────
+   Content lifts in when its panel becomes active, staggered by order.     */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.62s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.62s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.panel.is-active [data-reveal],
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.panel.is-active [data-reveal]:nth-child(1) { transition-delay: 0.05s; }
+.panel.is-active [data-reveal]:nth-child(2) { transition-delay: 0.13s; }
+.panel.is-active [data-reveal]:nth-child(3) { transition-delay: 0.21s; }
+.panel.is-active [data-reveal]:nth-child(4) { transition-delay: 0.29s; }
+.panel.is-active [data-reveal]:nth-child(5) { transition-delay: 0.37s; }
+.panel.is-active [data-reveal]:nth-child(6) { transition-delay: 0.45s; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1; transform: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   RANK LADDER
+   The rank section used to be one lone shield with no context. It now
+   shows the whole climb — every rank, the one you're on, and how far
+   the ladder goes.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.rank-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.7rem, 2vh, 1.2rem);
+}
+
+.shield-halo {
+  position: absolute;
+  inset: -18%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(62, 176, 255, 0.20), transparent 62%);
+  filter: blur(6px);
+  animation: haloBreathe 4.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes haloBreathe {
+  0%, 100% { opacity: 0.55; transform: scale(0.96); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+.rank-now {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  margin: 0;
+  font-family: var(--font-display);
+}
+
+.rank-now__label {
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.rank-now__value {
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--text);
+  text-shadow: 0 0 26px rgba(62, 176, 255, 0.5);
+}
+
+.rank-ladder {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.3rem, 1.1vw, 0.7rem);
+  width: min(100%, 460px);
+  padding-top: 0.9rem;
+}
+
+.rank-ladder__rail {
+  position: absolute;
+  top: 0;
+  left: 4%;
+  right: 4%;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(232, 240, 255, 0.10);
+  overflow: hidden;
+}
+
+.rank-ladder__fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--signal-deep), var(--signal));
+  box-shadow: 0 0 12px rgba(62, 176, 255, 0.6);
+  transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+html.lang-ar .rank-ladder__fill {
+  background: linear-gradient(270deg, var(--signal-deep), var(--signal));
+}
+
+.rank-pip {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+  transition: color 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.rank-pip::before {
+  content: "";
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(232, 240, 255, 0.10);
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+}
+
+.rank-pip.is-done { color: var(--mute); }
+.rank-pip.is-done::before { background: rgba(62, 176, 255, 0.45); }
+
+.rank-pip.is-current {
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
+.rank-pip.is-current::before {
+  background: var(--signal);
+  box-shadow: 0 0 14px rgba(62, 176, 255, 0.85);
+}
+
+@media (max-width: 900px) {
+  .rank-ladder { width: min(100%, 380px); }
+  .rank-pip { font-size: 0.64rem; }
+}
+
+/* ── Responsive hardening ──────────────────────────────────────────────── */
+/*
+ * The page already had breakpoints, but they stepped: a heading sat at one
+ * size until 768px and then jumped. Between those steps — which is where most
+ * real phones actually live — the type was either too big for the column or
+ * too small for the space. `clamp()` makes the scale continuous instead, so
+ * the layout is right on a 320px phone and a 430px one without either being
+ * the size it was tuned for.
+ *
+ * Everything here is appended deliberately: it overrides the stepped rules
+ * above rather than replacing them, so the existing breakpoints still handle
+ * the structural reflows (stacking, hiding) that a scale cannot.
+ */
+
+:root {
+  /* One fluid ramp, referenced below. 100vw at the small end, capped so a
+     desktop does not get poster-sized body copy. */
+  --fluid-h1: clamp(2.1rem, 1.2rem + 4.6vw, 4.4rem);
+  --fluid-h2: clamp(1.5rem, 1.05rem + 2.2vw, 2.4rem);
+  --fluid-h3: clamp(1.15rem, 0.95rem + 1.1vw, 1.5rem);
+  --fluid-body: clamp(0.95rem, 0.9rem + 0.28vw, 1.06rem);
+  --fluid-gutter: clamp(16px, 4.2vw, 40px);
+}
+
+body { font-size: var(--fluid-body); }
+
+h1, .h1, .hero-title { font-size: var(--fluid-h1); line-height: 1.04; }
+h2, .h2, .section-title { font-size: var(--fluid-h2); line-height: 1.12; }
+h3, .h3 { font-size: var(--fluid-h3); line-height: 1.2; }
+
+/* No element may force the page wider than the screen — the single most
+   common cause of a phone rendering a site with a horizontal scrollbar. */
+html, body { overflow-x: hidden; }
+img, video, svg, canvas, iframe { max-width: 100%; height: auto; }
+pre, code, table { max-width: 100%; overflow-x: auto; }
+
+/* Long unbroken strings (URLs, package names) wrap instead of stretching. */
+p, li, td, dd, .mute, .faint { overflow-wrap: anywhere; }
+
+/* Honour the notch on phones held in landscape. */
+@supports (padding: max(0px)) {
+  .wrap, .container, main, footer, header {
+    padding-left: max(var(--fluid-gutter), env(safe-area-inset-left));
+    padding-right: max(var(--fluid-gutter), env(safe-area-inset-right));
+  }
+}
+
+/* Anything tappable gets a real target on a touch screen, whatever the
+   viewport width claims. */
+@media (pointer: coarse) {
+  a.btn, button, .btn, .nav a, .chip {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Short landscape phones: trim the vertical rhythm so the fold still holds
+   something useful. */
+@media (max-height: 480px) and (orientation: landscape) {
+  section { padding-block: clamp(18px, 4vh, 36px); }
+  .hero { min-height: auto; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REDESIGN — sections 1-7
+   The footer panel was the one section that already read well: a calm stack
+   of bands separated by hairlines, generous breathing room, no decorative
+   boxes competing with the words. Everything below carries that language
+   across the rest of the track, and adds the live-stats section.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Hero: the title carries the whole panel ─────────────────────────────── */
+/* Nothing else lives here by design, so the type gets room to breathe and
+   the optical centre sits slightly above the geometric one. */
+.panel--intro .intro {
+  gap: 0;
+}
+.panel--intro .mega {
+  font-size: clamp(4.6rem, 16vw, 11rem);
+  line-height: 0.9;
+  letter-spacing: 0.005em;
+  transform: translateY(-4%);
+}
+
+/* ── Sheet: the shared section container ─────────────────────────────────── */
+.sheet {
+  width: min(760px, 100%);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.9rem, 2.2vh, 1.5rem);
+  text-align: left;
+}
+.sheet--wide {
+  width: min(1000px, 100%);
+}
+.sheet__head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.sheet__head .kicker {
+  margin: 0;
+}
+.sheet__head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fluid-h2);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.sheet__head .lead {
+  margin: 0.5rem 0 0;
+  max-width: 58ch;
+  font-family: var(--font-body);
+  font-size: var(--fluid-body);
+  line-height: 1.6;
+  color: var(--mute);
+}
+
+/* The hairline is the whole visual system — one rule, used everywhere, so
+   sections read as bands of one document rather than a pile of cards. */
+.sheet__rule {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--line) 12%,
+    var(--line) 88%,
+    transparent
+  );
+}
+.sheet__foot {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--faint);
+}
+.sheet__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+/* ── About: three pillars instead of three dense paragraphs ──────────────── */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2.6vw, 2rem);
+  margin: 0;
+}
+.pillar dt {
+  font-family: var(--font-display);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--signal);
+  margin-bottom: 0.5rem;
+}
+.pillar dd {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--mute);
+}
+
+.trust-row {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.4rem;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--faint);
+}
+.trust-row li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.trust-row li::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--signal);
+  opacity: 0.85;
+  flex: none;
+}
+
+/* ── Features: quieter cards, so six of them do not shout at once ────────── */
+.panel--features .features {
+  text-align: left;
+}
+.panel--features .feature-grid {
+  max-width: none;
+  gap: clamp(0.75rem, 1.8vw, 1.25rem);
+}
+.panel--features .feature {
+  gap: 0.4rem;
+  padding: clamp(0.85rem, 1.6vw, 1.1rem);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.022);
+  border-color: var(--line);
+}
+.panel--features .feature:hover {
+  border-color: rgba(66, 165, 245, 0.45);
+  background: rgba(66, 165, 245, 0.05);
+}
+.panel--features .feature h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.panel--features .feature p {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--mute);
+}
+.panel--features .feature__icon {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: rgba(66, 165, 245, 0.12);
+  color: var(--signal);
+}
+.panel--features .feature__icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* ── Quests: a checked list carries the detail the paragraph used to ─────── */
+.tick-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.tick-list li {
+  position: relative;
+  padding-left: 1.6rem;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--mute);
+}
+.tick-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.42em;
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid var(--signal);
+  border-bottom: 2px solid var(--signal);
+  transform: rotate(-45deg);
+}
+
+/* ── Live section ─────────────────────────────────────────────────────────── */
+.panel--live .live {
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: safe center;
+}
+.live__head {
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.live__pulse {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  white-space: nowrap;
+}
+.live__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--faint);
+  flex: none;
+}
+.live-sheet[data-state="live"] .live__dot {
+  background: #4ade80;
+  box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55);
+  animation: livePulse 2.4s ease-out infinite;
+}
+.live-sheet[data-state="offline"] .live__dot {
+  background: var(--heat);
+  opacity: 0.7;
+}
+@keyframes livePulse {
+  0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .live-sheet[data-state="live"] .live__dot { animation: none; }
+}
+
+.live-sheet .stat-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: clamp(0.9rem, 2.4vw, 2rem);
+  align-items: end;
+}
+/* `.stat` is also the old boxed stat-grid card defined further up this file,
+   so these have to unset the border and fill — otherwise the live figures come
+   back as four floating cards fighting the hairline layout. */
+.live-sheet .stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+.live-sheet .stat__value {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 1.1rem + 2.1vw, 3rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+/* The "right now" figure is the reason the section exists — let it lead. */
+.live-sheet .stat--hero .stat__value {
+  font-size: clamp(2.4rem, 1.4rem + 3.6vw, 4.4rem);
+  background: linear-gradient(180deg, #fff 20%, #8fd0ff 110%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.live-sheet .stat__label {
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.4;
+  color: var(--faint);
+  text-wrap: balance;
+}
+/* Nothing has arrived yet: hold the layout, do not flash zeroes. */
+.live-sheet[data-state="loading"] .stat__value {
+  color: var(--faint);
+  -webkit-text-fill-color: currentColor;
+}
+
+.live-chart {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.live-chart__cap {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.live-chart__peak {
+  font-variant-numeric: tabular-nums;
+  color: var(--mute);
+}
+.live-chart__bars {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: clamp(0.4rem, 1.2vw, 0.9rem);
+  height: clamp(96px, 16vh, 150px);
+}
+.live-bar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+/* Capped width: at seven columns across a 1000px sheet, a full-bleed bar reads
+   as a slab rather than a measurement. */
+.live-bar__fill {
+  display: block;
+  width: 100%;
+  max-width: 52px;
+  height: var(--h, 2%);
+  border-radius: 6px 6px 2px 2px;
+  background: linear-gradient(
+    180deg,
+    rgba(66, 165, 245, 0.85),
+    rgba(66, 165, 245, 0.22)
+  );
+  transition: height 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.live-bar.is-today .live-bar__fill {
+  background: linear-gradient(180deg, #8fd0ff, rgba(66, 165, 245, 0.35));
+  box-shadow: 0 0 18px rgba(66, 165, 245, 0.35);
+}
+.live-bar__day {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--faint);
+}
+.live-bar.is-today .live-bar__day {
+  color: var(--signal);
+}
+/* Nothing to plot yet (loading, offline, or a brand-new week): hold the
+   figure's height with a baseline rule rather than seven grey slabs that read
+   as broken image boxes. */
+.live-chart__bars:empty {
+  border-bottom: 1px solid var(--line);
+}
+@media (prefers-reduced-motion: reduce) {
+  .live-bar__fill { transition: none; }
+}
+
+.live__note {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--faint);
+  max-width: 68ch;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 900px), (pointer: coarse) {
+  .sheet,
+  .sheet--wide {
+    width: 100%;
+  }
+  .pillars {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+  .panel--features .feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .stat-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.2rem;
+  }
+  .stat--hero {
+    grid-column: 1 / -1;
+  }
+  .live__head {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .panel--intro .mega {
+    font-size: clamp(3.6rem, 19vw, 6rem);
+  }
+  .panel--features .feature-grid {
+    grid-template-columns: 1fr;
+  }
+  .trust-row {
+    gap: 0.35rem 1rem;
+    font-size: 0.73rem;
+  }
+  .live-chart__bars {
+    height: 64px;
+  }
+  .live-chart__cap {
+    font-size: 0.68rem;
+  }
+}
+
+/* Short screens: the road lane already eats the bottom of every panel, so
+   drop the optional bands before the content starts fighting the mascot. */
+@media (max-height: 700px) and (min-width: 901px) {
+  .sheet {
+    gap: 0.75rem;
+  }
+  .panel--features .sheet__foot,
+  .panel--about .trust-row {
+    display: none;
+  }
 }
