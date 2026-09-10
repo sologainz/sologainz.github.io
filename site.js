@@ -1,6 +1,31 @@
+/**
+ * Solo Gainz — sologainz.github.io
+ *
+ * The site is four panels: title, trailer, FAQ, footer. Desktop reads them as
+ * a horizontal filmstrip driven by the wheel; touch devices read them as an
+ * ordinary vertical page, because hijacking scroll on a phone is how you make
+ * a page feel broken.
+ *
+ * This file used to carry an auto-battle arena, a rank-shield shatter, a chest
+ * gacha, a live-stats panel, a download modal and an exercise library. Every
+ * one of those sections was removed from the markup in the redesign, so the
+ * code sat behind `if (!el) return;` guards, downloading nothing and doing
+ * nothing - but still parsing, and still pulling a sprite table for animations
+ * no page could play. It is gone; what is left is what the four panels use.
+ */
 (() => {
   "use strict";
 
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /**
+   * The travelling figure beside each panel.
+   *
+   * Only `idle` is on the journey; the two shock poses exist so the figure
+   * flinches when the pointer touches him in the last panel. Nothing else in
+   * media/player/ is referenced any more, and the unreferenced folders have
+   * been deleted rather than left to ship.
+   */
   const SPRITES = {
     idle: {
       fps: 8,
@@ -12,108 +37,6 @@
         "media/player/idle/Idle05.png",
         "media/player/idle/Idle06.png",
         "media/player/idle/Idle07.png",
-      ],
-    },
-    walk: {
-      fps: 10,
-      frames: [
-        "media/player/walk/Walk01.png",
-        "media/player/walk/Walk02.png",
-        "media/player/walk/Walk03.png",
-        "media/player/walk/Walk04.png",
-        "media/player/walk/Walk05.png",
-        "media/player/walk/Walk06.png",
-        "media/player/walk/Walk07.png",
-        "media/player/walk/Walk08.png",
-      ],
-    },
-    run: {
-      fps: 12,
-      frames: [
-        "media/player/run/Run01.png",
-        "media/player/run/Run02.png",
-        "media/player/run/Run03.png",
-        "media/player/run/Run04.png",
-        "media/player/run/Run05.png",
-        "media/player/run/Run06.png",
-        "media/player/run/Run07.png",
-        "media/player/run/Run08.png",
-      ],
-    },
-    punch: {
-      fps: 12,
-      frames: [
-        "media/player/punch/Punch0101.png",
-        "media/player/punch/Punch0102.png",
-        "media/player/punch/Punch0103.png",
-        "media/player/punch/Punch0104.png",
-        "media/player/punch/Punch0105.png",
-        "media/player/punch/Punch0106.png",
-      ],
-    },
-    kick: {
-      fps: 12,
-      frames: [
-        "media/player/kick/Kick0101.png",
-        "media/player/kick/Kick0102.png",
-        "media/player/kick/Kick0103.png",
-        "media/player/kick/Kick0104.png",
-        "media/player/kick/Kick0105.png",
-        "media/player/kick/Kick0106.png",
-        "media/player/kick/Kick0107.png",
-        "media/player/kick/Kick0108.png",
-        "media/player/kick/Kick0109.png",
-      ],
-    },
-    kick2: {
-      fps: 12,
-      frames: [
-        "media/player/kick2/Kick0201.png",
-        "media/player/kick2/Kick0202.png",
-        "media/player/kick2/Kick0203.png",
-        "media/player/kick2/Kick0204.png",
-        "media/player/kick2/Kick0205.png",
-        "media/player/kick2/Kick0206.png",
-        "media/player/kick2/Kick0207.png",
-        "media/player/kick2/Kick0208.png",
-      ],
-    },
-    kick3: {
-      fps: 12,
-      frames: [
-        "media/player/kick3/Kick0301.png",
-        "media/player/kick3/Kick0302.png",
-        "media/player/kick3/Kick0303.png",
-        "media/player/kick3/Kick0304.png",
-        "media/player/kick3/Kick0305.png",
-        "media/player/kick3/Kick0306.png",
-        "media/player/kick3/Kick0307.png",
-        "media/player/kick3/Kick0308.png",
-        "media/player/kick3/Kick0309.png",
-      ],
-    },
-    punch3: {
-      fps: 12,
-      frames: [
-        "media/player/punch3/Punch0301.png",
-        "media/player/punch3/Punch0302.png",
-        "media/player/punch3/Punch0303.png",
-        "media/player/punch3/Punch0304.png",
-        "media/player/punch3/Punch0305.png",
-        "media/player/punch3/Punch0306.png",
-        "media/player/punch3/Punch0307.png",
-      ],
-    },
-    stunned: {
-      fps: 6,
-      frames: [
-        "media/player/stunned/Stunned01.png",
-        "media/player/stunned/Stunned02.png",
-        "media/player/stunned/Stunned03.png",
-        "media/player/stunned/Stunned04.png",
-        "media/player/stunned/Stunned05.png",
-        "media/player/stunned/Stunned06.png",
-        "media/player/stunned/Stunned07.png",
       ],
     },
     shockLight: {
@@ -134,140 +57,19 @@
         "media/player/shockheavy/ShockHeavy04.png",
       ],
     },
-    hit: {
-      fps: 10,
-      frames: [
-        "media/player/hit/Hit01.png",
-        "media/player/hit/Hit02.png",
-        "media/player/hit/Hit03.png",
-      ],
-    },
-    jump: {
-      fps: 8,
-      frames: [
-        "media/player/jump/Jump01.png",
-        "media/player/jump/Jump02.png",
-        "media/player/jump/Jump03.png",
-      ],
-    },
-    slide: {
-      fps: 12,
-      frames: [
-        "media/player/slide/Slide01.png",
-        "media/player/slide/Slide02.png",
-        "media/player/slide/Slide03.png",
-        "media/player/slide/Slide04.png",
-      ],
-    },
-    sprint: {
-      fps: 14,
-      frames: [
-        "media/player/sprint/Sprint01.png",
-        "media/player/sprint/Sprint02.png",
-        "media/player/sprint/Sprint03.png",
-        "media/player/sprint/Sprint04.png",
-        "media/player/sprint/Sprint05.png",
-        "media/player/sprint/Sprint06.png",
-      ],
-    },
-    throw: {
-      fps: 12,
-      frames: [
-        "media/player/throw/ThrowOverarm01.png",
-        "media/player/throw/ThrowOverarm02.png",
-        "media/player/throw/ThrowOverarm03.png",
-        "media/player/throw/ThrowOverarm04.png",
-        "media/player/throw/ThrowOverarm05.png",
-      ],
-    },
-    knockback: {
-      fps: 12,
-      frames: [
-        "media/player/knockback/Knockback01.png",
-        "media/player/knockback/Knockback02.png",
-        "media/player/knockback/Knockback03.png",
-        "media/player/knockback/Knockback04.png",
-        "media/player/knockback/Knockback05.png",
-        "media/player/knockback/Knockback06.png",
-      ],
-    },
-    die: {
-      fps: 12,
-      frames: [
-        "media/player/die/Die01.png",
-        "media/player/die/Die02.png",
-        "media/player/die/Die03.png",
-        "media/player/die/Die04.png",
-        "media/player/die/Die05.png",
-        "media/player/die/Die06.png",
-        "media/player/die/Die07.png",
-        "media/player/die/Die08.png",
-        "media/player/die/Die09.png",
-      ],
-    },
-    getup: {
-      fps: 10,
-      frames: [
-        "media/player/getup/GetUp01.png",
-        "media/player/getup/GetUp02.png",
-        "media/player/getup/GetUp03.png",
-      ],
-    },
-    roll: {
-      fps: 12,
-      frames: [
-        "media/player/roll/Roll01.png",
-        "media/player/roll/Roll02.png",
-        "media/player/roll/Roll03.png",
-        "media/player/roll/Roll04.png",
-        "media/player/roll/Roll05.png",
-        "media/player/roll/Roll06.png",
-        "media/player/roll/Roll07.png",
-        "media/player/roll/Roll08.png",
-        "media/player/roll/Roll09.png",
-        "media/player/roll/Roll10.png",
-      ],
-    },
   };
 
-  // Loot chest sprites (idle loop + one-shot open) per tier. Frame folders live
-  // under media/chest/<dir>/1..5.png — wooden uses the unprefixed idle/open.
-  const CHEST_DIRS = {
-    wood: { idle: "idle", open: "open" },
-    iron: { idle: "iron-idle", open: "iron-open" },
-    gold: { idle: "gold-idle", open: "gold-open" },
-    diamond: { idle: "diamond-idle", open: "diamond-open" },
-  };
-  const chestFrames = (dir) =>
-    [1, 2, 3, 4, 5].map((n) => `media/chest/${dir}/${n}.png`);
-  Object.entries(CHEST_DIRS).forEach(([tier, dirs]) => {
-    SPRITES[`chest-${tier}-idle`] = { fps: 6, frames: chestFrames(dirs.idle) };
-    SPRITES[`chest-${tier}-open`] = { fps: 12, frames: chestFrames(dirs.open) };
-  });
+  /** One entry per panel, in document order. */
+  const JOURNEY = [
+    { scale: 2.2 },
+    { scale: 2.2 },
+    { scale: 2.2 },
+    { scale: 2.2, final: true },
+  ];
+
+  // ── Sprites ───────────────────────────────────────────────────────────────
 
   const cache = new Map();
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // Per-section prototype journey. Each stage is one forward scroll step
-  // ({ x: road position, anim }). The final section remains animated instead
-  // of settling into the old sleeping state.
-  // Each section is a single "run across" leg: the prototype enters at the left
-  // running, and one forward scroll runs him off to the right while the camera
-  // advances to the next section — a continuous sprint toward the final panel.
-  // `x` is ignored while the prototype is fixed in place (JS pins him at
-  // center), but kept so the journey data stays self-documenting.
-  // One pose per section, in reading order:
-  // 0 intro · 1 trailer · 2 faq · 3 footer.
-  const JOURNEY = {
-    0: { scale: 2.2, stages: [{ x: "50%", anim: "idle" }] },
-    1: { scale: 2.2, stages: [{ x: "50%", anim: "idle" }] },
-    2: { scale: 2.2, stages: [{ x: "50%", anim: "idle" }] },
-    3: {
-      scale: 2.2,
-      final: true,
-      stages: [{ x: "50%", anim: "idle" }],
-    },
-  };
 
   function loadImage(src) {
     if (cache.has(src)) return cache.get(src);
@@ -289,7 +91,7 @@
       try {
         images.push(await loadImage(src));
       } catch (_) {
-        /* skip missing frame */
+        /* a missing frame drops out of the loop rather than killing it */
       }
     }
     if (!images.length) throw new Error(`empty:${key}`);
@@ -297,11 +99,10 @@
   }
 
   class SpritePlayer {
-    constructor(canvas, { scale = 3.5, flip = false } = {}) {
+    constructor(canvas, { scale = 3.5 } = {}) {
       this.canvas = canvas;
       this.ctx = canvas.getContext("2d");
       this.scale = scale;
-      this.flip = flip;
       this.anim = null;
       this.frame = 0;
       this.acc = 0;
@@ -321,18 +122,16 @@
     }
 
     start() {
-      if (this.running || reduceMotion) {
-        this.draw();
-        return;
-      }
+      // A still frame is already painted, so a reduced-motion visitor loses
+      // the loop and nothing else.
+      if (this.running || reduceMotion) return;
       this.running = true;
       this._last = performance.now();
       const tick = (now) => {
         if (!this.running) return;
-        const dt = now - this._last;
+        const dt = (now - this._last) / 1000;
         this._last = now;
-        this.update(dt);
-        this.draw();
+        this.step(dt);
         this._raf = requestAnimationFrame(tick);
       };
       this._raf = requestAnimationFrame(tick);
@@ -344,63 +143,44 @@
       this._raf = 0;
     }
 
-    update(dt) {
+    step(dt) {
       if (!this.anim) return;
-      const ms = 1000 / this.anim.fps;
-      const n = this.anim.images.length;
       this.acc += dt;
-      while (this.acc >= ms) {
-        this.acc -= ms;
-        if (this.loop) {
-          this.frame = (this.frame + 1) % n;
-        } else if (this.frame < n - 1) {
-          this.frame += 1;
+      const spf = 1 / this.anim.fps;
+      while (this.acc >= spf) {
+        this.acc -= spf;
+        this.frame += 1;
+        if (this.frame >= this.anim.images.length) {
+          this.frame = this.loop ? 0 : this.anim.images.length - 1;
+          if (!this.loop) this.stop();
         }
       }
+      this.draw();
     }
 
     draw() {
-      if (!this.anim) return;
+      const { ctx, canvas } = this;
+      if (!ctx || !this.anim) return;
       const img = this.anim.images[this.frame];
-      const w = Math.round(img.naturalWidth * this.scale);
-      const h = Math.round(img.naturalHeight * this.scale);
-      if (this.canvas.width !== w || this.canvas.height !== h) {
-        this.canvas.width = w;
-        this.canvas.height = h;
-      }
-      const ctx = this.ctx;
-      ctx.clearRect(0, 0, w, h);
+      if (!img) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.imageSmoothingEnabled = false;
-      ctx.save();
-      if (this.flip) {
-        ctx.translate(w, 0);
-        ctx.scale(-1, 1);
-      }
-      ctx.drawImage(img, 0, 0, w, h);
-      ctx.restore();
+      const w = img.width * this.scale;
+      const h = img.height * this.scale;
+      ctx.drawImage(img, (canvas.width - w) / 2, canvas.height - h, w, h);
     }
   }
 
+  // ── Desktop: the horizontal filmstrip ─────────────────────────────────────
 
-  // ── Horizontal scroller ──────────────────────────────────────────────────
   class HorizontalHunt {
     constructor(track) {
       this.track = track;
       this.panels = [...track.querySelectorAll(".panel")];
       this.fill = document.getElementById("scrollFill");
-      this.hint = document.getElementById("scrollHint");
       this.dots = document.getElementById("dots");
       this.index = 0;
       this._prevIndex = 0;
-      this._busy = false;
-      // The prototype walks a multi-step journey inside each section. `stage` is
-      // the current step within the active section; each forward scroll bumps
-      // it, and only once the last stage is passed does the camera advance.
-      this.stage = 0;
-      this._journey = {};
-      this._onStage = null;
-      this._onExit = null;
-      this._hintHidden = false;
       this._storeKey = "sg-panel";
       this._buildDots();
       this._restore();
@@ -414,7 +194,8 @@
         i = parseInt(sessionStorage.getItem(this._storeKey) || "0", 10) || 0;
       } catch (_) {}
       if (i <= 0 || i >= this.panels.length) return;
-      // Instant jump (bypass CSS smooth scroll) so refresh keeps your section.
+      // Instant jump (bypassing CSS smooth scroll) so a refresh lands you back
+      // on the panel you were reading rather than sliding there.
       const prev = this.track.style.scrollBehavior;
       this.track.style.scrollBehavior = "auto";
       this.track.scrollLeft = i * this.track.clientWidth;
@@ -438,10 +219,9 @@
 
     _bind() {
       const t = this.track;
-
       t.addEventListener("scroll", () => this._onScroll(), { passive: true });
 
-      // Map mouse / trackpad wheel ÔåÆ sideways navigation (one panel per gesture)
+      // Wheel and trackpad map to sideways travel, one panel per gesture.
       let wheelLock = false;
       t.addEventListener(
         "wheel",
@@ -452,7 +232,7 @@
           e.preventDefault();
           if (wheelLock) return;
           wheelLock = true;
-          this.step(delta > 0 ? 1 : -1);
+          this.go(this.index + (delta > 0 ? 1 : -1));
           setTimeout(() => {
             wheelLock = false;
           }, 620);
@@ -460,14 +240,13 @@
         { passive: false }
       );
 
-      // Keyboard
       window.addEventListener("keydown", (e) => {
         if (e.key === "ArrowRight" || e.key === "PageDown") {
           e.preventDefault();
-          this.step(1);
+          this.go(this.index + 1);
         } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
           e.preventDefault();
-          this.step(-1);
+          this.go(this.index - 1);
         } else if (e.key === "Home") {
           e.preventDefault();
           this.go(0);
@@ -476,84 +255,11 @@
           this.go(this.panels.length - 1);
         }
       });
-
-      // Touch drag assist (native scroll works; boost snap feel)
-      let startX = 0;
-      let startLeft = 0;
-      t.addEventListener(
-        "touchstart",
-        (e) => {
-          startX = e.touches[0].clientX;
-          startLeft = t.scrollLeft;
-        },
-        { passive: true }
-      );
-      t.addEventListener(
-        "touchmove",
-        (e) => {
-          const dx = startX - e.touches[0].clientX;
-          t.scrollLeft = startLeft + dx;
-        },
-        { passive: true }
-      );
-    }
-
-    // One scroll/arrow step: walk the prototype to the next waypoint inside the
-    // section, or ÔÇö once the section's journey is done ÔÇö dash off and pan over.
-    step(dir) {
-      if (this._busy) return;
-      const cfg = this._journey[this.index];
-      const lastStage = cfg ? cfg.stages.length - 1 : 0;
-
-      if (dir > 0) {
-        if (cfg && this.stage < lastStage) {
-          this.stage += 1;
-          this._applyStage();
-          return;
-        }
-        // Journey done. Final section just rests; others sprint off & advance.
-        if (cfg && cfg.final) return;
-        if (this.index >= this.panels.length - 1) return;
-        this._exitAndAdvance();
-        return;
-      }
-
-      // Backward: step the prototype back, or retreat to the previous section.
-      if (cfg && this.stage > 0) {
-        this.stage -= 1;
-        this._applyStage();
-        return;
-      }
-      if (this.index > 0) this._scrollTo(this.index - 1);
-    }
-
-    _applyStage(instant = false) {
-      if (this._onStage) this._onStage(this.index, this.stage, instant);
-    }
-
-    _exitAndAdvance() {
-      const from = this.index;
-      this._busy = true;
-      const done = () => {
-        this._scrollTo(from + 1);
-        setTimeout(() => {
-          this._busy = false;
-        }, 800);
-      };
-      if (this._onExit && !reduceMotion) {
-        Promise.resolve(this._onExit(from)).then(done);
-      } else {
-        done();
-      }
     }
 
     go(i) {
-      if (this._busy) return;
       const next = Math.max(0, Math.min(this.panels.length - 1, i));
-      if (next !== this.index) this._scrollTo(next);
-    }
-
-    _scrollTo(next) {
+      if (next === this.index) return;
       this.track.scrollTo({
         left: next * this.track.clientWidth,
         top: 0,
@@ -569,12 +275,6 @@
 
       const idx = Math.round(t.scrollLeft / t.clientWidth);
       this.index = Math.max(0, Math.min(this.panels.length - 1, idx));
-
-      // Entering a new section: snap the prototype to its first mark instantly.
-      if (this.index !== this._prevIndex) {
-        this.stage = 0;
-        this._applyStage(true);
-      }
       this._prevIndex = this.index;
 
       try {
@@ -582,142 +282,146 @@
       } catch (_) {}
 
       if (this.dots) {
-        [...this.dots.children].forEach((d, i) => d.classList.toggle("is-active", i === this.index));
+        [...this.dots.children].forEach((d, i) =>
+          d.classList.toggle("is-active", i === this.index)
+        );
       }
-
-      // Drives the staggered content reveal for the panel you're looking at.
+      // Drives the staggered content reveal for the panel in view.
       this.panels.forEach((p, i) => p.classList.toggle("is-active", i === this.index));
-
-      if (!this._hintHidden && t.scrollLeft > 24 && this.hint) {
-        this._hintHidden = true;
-        this.hint.classList.add("is-gone");
-      }
     }
   }
 
+  // ── Touch: an ordinary vertical page ──────────────────────────────────────
 
-  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-
-  // ── Solo training arena (single prototype drilling strikes, no opponent) ─────
-  class Arena {
-    constructor(root) {
-      this.root = root;
-      // Solo prototype drilling strikes in place, centered (camera stays fixed).
-      this.a = this._make(
-        root.querySelector('[data-fighter="a"]'),
-        root.querySelector('[data-shadow="a"]'),
-        50,
-        1
-      );
-      this._boot();
-    }
-
-    _make(canvas, shadow, home, dir) {
-      const f = {
-        canvas,
-        shadow,
-        home,
-        dir,
-        x: home,
-        hp: 3,
-        sp: new SpritePlayer(canvas, { scale: 3, flip: dir < 0 }),
-      };
-      this._place(f, home);
-      return f;
-    }
-
-    _place(f, x) {
-      f.x = x;
-      f.canvas.style.left = `${x}%`;
-      if (f.shadow) f.shadow.style.left = `${x}%`;
-    }
-
-    _face(f, dir) {
-      f.sp.flip = dir < 0;
-    }
-
-    _anim(f, key, opts) {
-      f.sp.play(key, opts).catch(() => {});
-    }
-
-    async _boot() {
-      const f = this.a;
-      this._face(f, 1);
-      await f.sp.play("idle").catch(() => {});
-      if (reduceMotion) return;
-
-      // Solo training loop — the prototype drills strikes in place, no opponent.
-      const combo = ["punch", "kick", "punch3", "kick2", "kick3", "throw"];
-      let i = 0;
-      for (;;) {
-        this._anim(f, "idle");
-        await wait(700);
-        this._anim(f, combo[i % combo.length]);
-        i += 1;
-        await wait(560);
-      }
-    }
-  }
-
-  // Vertical (mobile / touch) mode: no scroll hijacking. Each section's prototype
-  // simply loops its opening animation, centered on the ground line, and only
-  // animates while its section is on screen (battery-friendly).
   function setupVerticalMode(heroes) {
-    const list = Object.entries(heroes);
-    list.forEach(([idx, hero]) => {
-      const cfg = JOURNEY[idx];
-      const st = cfg && cfg.stages ? cfg.stages[0] : null;
-      hero.el.style.transition = "none";
+    Object.values(heroes).forEach((hero) => {
       hero.el.style.left = "50%";
-      hero.el.classList.remove("is-sprintoff");
-      hero.el.classList.toggle("is-sleeping", !!(st && st.sleep));
-      hero._anim = st ? st.anim : "idle";
-      // Kick off every prototype immediately so a frame is always painted — even
-      // for sections whose ground line sits far down a tall panel. Without this
-      // the middle sections could stay blank until (if ever) fully scrolled to.
-      hero.sprite.play(hero._anim, { loop: true }).catch(() => {});
+      hero.sprite.play("idle", { loop: true }).catch(() => {});
     });
 
     if ("IntersectionObserver" in window) {
       const io = new IntersectionObserver(
-        (obs) => {
-          obs.forEach((e) => {
+        (entries) => {
+          entries.forEach((e) => {
             const hero = heroes[e.target.dataset.journey];
             if (!hero) return;
             if (e.isIntersecting) {
               if (!hero.sprite.running) {
-                hero.sprite.play(hero._anim, { loop: true }).catch(() => {});
+                hero.sprite.play("idle", { loop: true }).catch(() => {});
               }
             } else {
+              // Off screen animates nothing: on a phone this is the difference
+              // between four looping canvases and none.
               hero.sprite.stop();
             }
           });
         },
-        // Generous margin so a prototype is running well before its ground line
-        // scrolls into view (and keeps running just after it leaves).
         { threshold: 0, rootMargin: "300px 0px 300px 0px" }
       );
-      list.forEach(([, hero]) => io.observe(hero.el));
+      Object.values(heroes).forEach((hero) => io.observe(hero.el));
     }
 
-    // Reflect page scroll in the header progress rail.
     const fill = document.getElementById("scrollFill");
     if (fill) {
+      let queued = false;
       const upd = () => {
+        queued = false;
         const doc = document.documentElement;
         const max = doc.scrollHeight - doc.clientHeight;
         const p = max > 0 ? (window.scrollY || doc.scrollTop) / max : 0;
         fill.style.width = `${Math.min(100, Math.max(0, p * 100))}%`;
       };
-      window.addEventListener("scroll", upd, { passive: true });
-      window.addEventListener("resize", upd, { passive: true });
+      // Coalesced into a frame: a raw scroll handler writing a style on every
+      // event is the classic way to make a phone drop frames while scrolling.
+      const onScroll = () => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(upd);
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll, { passive: true });
       upd();
     }
   }
 
+  /**
+   * Reveals content as it scrolls in.
+   *
+   * The filmstrip gets this for free - it marks the panel in view `.is-active`
+   * and the CSS takes it from there. The vertical page has no active panel, so
+   * without this every `[data-reveal]` element would sit at `opacity: 0`
+   * forever and the phone layout would render as a blank page with a footer.
+   *
+   * Three ways in, because "the content is visible at all" is not something to
+   * stake on one browser API firing. IntersectionObserver is the cheap path;
+   * a frame-coalesced scroll handler covers the cases where it stays silent
+   * (a backgrounded tab restored from bfcache, some embedded webviews, a page
+   * that is never composited); and a timer reveals whatever is left after a
+   * few seconds no matter what. A missed animation is a blemish - a page that
+   * never paints its text is a broken site.
+   */
+  function setupReveal() {
+    const pending = new Set(document.querySelectorAll("[data-reveal]"));
+    if (!pending.size) return;
+
+    const show = (el) => {
+      el.classList.add("is-in");
+      pending.delete(el);
+      if (io) io.unobserve(el);
+    };
+
+    const sweep = () => {
+      if (!pending.size) return;
+      const limit = window.innerHeight * 0.92;
+      [...pending].forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < limit && r.bottom > 0) show(el);
+      });
+      if (!pending.size) teardown();
+    };
+
+    let queued = false;
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        sweep();
+      });
+    };
+
+    const teardown = () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+
+    let io = null;
+    if ("IntersectionObserver" in window && !reduceMotion) {
+      io = new IntersectionObserver(
+        (entries) => entries.forEach((e) => e.isIntersecting && show(e.target)),
+        { threshold: 0.15, rootMargin: "0px 0px -8% 0px" }
+      );
+      pending.forEach((el) => io.observe(el));
+    }
+
+    if (reduceMotion) {
+      [...pending].forEach(show);
+      return;
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    sweep();
+    // Last resort: whatever is still hidden after this simply appears.
+    setTimeout(() => {
+      [...pending].forEach(show);
+      teardown();
+    }, 2500);
+  }
+
+  /** The figure flinches when you touch him in the last panel. */
   function setupFinalShockReaction(heroes) {
-    const finalIndex = String(Object.keys(JOURNEY).length - 1);
-    const hero = heroes[finalIndex];
+    const hero = heroes[JOURNEY.length - 1];
     if (!hero) return;
     const canvas = hero.el.querySelector("canvas");
     if (!canvas) return;
@@ -726,29 +430,22 @@
     canvas.style.pointerEvents = "auto";
     canvas.style.cursor = "pointer";
 
-    let shocked = false;
     let activeShock = "";
     let settleTimer = 0;
     let cooldownUntil = 0;
-    const COOLDOWN_MS = 900;
-    const setAnimation = (key) => {
-      hero._anim = key;
-      hero.sprite.play(key, { loop: true }).catch(() => {});
-    };
 
     const isOnModel = (event) => {
       const rect = canvas.getBoundingClientRect();
       if (!rect.width || !rect.height) return false;
-      const x = Math.floor((event.clientX - rect.left) * canvas.width / rect.width);
-      const y = Math.floor((event.clientY - rect.top) * canvas.height / rect.height);
+      const x = Math.floor(((event.clientX - rect.left) * canvas.width) / rect.width);
+      const y = Math.floor(((event.clientY - rect.top) * canvas.height) / rect.height);
       if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) return false;
-
-      // Check a small neighborhood so thin pixel-art limbs still respond.
+      // A 3x3 neighbourhood, so thin pixel-art limbs still register a hit.
       const left = Math.max(0, x - 1);
       const top = Math.max(0, y - 1);
-      const width = Math.min(canvas.width - left, 3);
-      const height = Math.min(canvas.height - top, 3);
-      const pixels = canvas.getContext("2d").getImageData(left, top, width, height).data;
+      const w = Math.min(canvas.width - left, 3);
+      const h = Math.min(canvas.height - top, 3);
+      const pixels = canvas.getContext("2d").getImageData(left, top, w, h).data;
       for (let i = 3; i < pixels.length; i += 4) {
         if (pixels[i] > 24) return true;
       }
@@ -758,23 +455,25 @@
     const trigger = (key) => {
       const now = performance.now();
       if (now < cooldownUntil) return;
-      cooldownUntil = now + COOLDOWN_MS;
+      cooldownUntil = now + 900;
       clearTimeout(settleTimer);
-      if (!shocked || activeShock !== key) {
-        shocked = true;
+      if (activeShock !== key) {
         activeShock = key;
-        setAnimation(key);
+        hero.sprite.play(key, { loop: true }).catch(() => {});
       }
       settleTimer = setTimeout(() => {
-        shocked = false;
         activeShock = "";
-        setAnimation("idle");
+        hero.sprite.play("idle", { loop: true }).catch(() => {});
       }, 700);
     };
 
-    canvas.addEventListener("pointermove", (event) => {
-      if (isOnModel(event)) trigger("shockLight");
-    }, { passive: true });
+    canvas.addEventListener(
+      "pointermove",
+      (event) => {
+        if (isOnModel(event)) trigger("shockLight");
+      },
+      { passive: true }
+    );
     canvas.addEventListener("pointerdown", (event) => {
       if (event.button !== 2 || !isOnModel(event)) return;
       event.preventDefault();
@@ -783,39 +482,55 @@
     canvas.addEventListener("contextmenu", (event) => event.preventDefault());
   }
 
+  // ── Language ──────────────────────────────────────────────────────────────
+
+  /**
+   * Arabic needs Cairo; English does not.
+   *
+   * All the pages used to request Cairo alongside everything else, so every
+   * English visitor - the default, and the overwhelming majority - downloaded
+   * font files that were never painted. It is fetched the first time Arabic is
+   * actually selected, and cached from then on.
+   */
+  function ensureArabicFont() {
+    if (document.getElementById("cairoFont")) return;
+    const link = document.createElement("link");
+    link.id = "cairoFont";
+    link.rel = "stylesheet";
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap";
+    document.head.appendChild(link);
+  }
+
   function setupLanguage() {
     const btn = document.getElementById("langBtn");
     if (!btn) return;
     const els = [...document.querySelectorAll("[data-ar]")];
-    // Capture the original (English) markup once so we can restore it.
+    // Capture the original English markup once, so it can be restored.
     els.forEach((el) => {
       if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
     });
 
     const apply = (lang) => {
       const ar = lang === "ar";
+      if (ar) ensureArabicFont();
       const root = document.documentElement;
       root.classList.toggle("lang-ar", ar);
       root.lang = ar ? "ar" : "en";
-      // Keep the layout exactly the same (LTR) — only swap the text.
+      // The layout stays LTR — only the text swaps.
       els.forEach((el) => {
         el.innerHTML = ar ? el.dataset.ar : el.dataset.en;
       });
-      // Button invites the OTHER language.
+      // The button invites the OTHER language.
       btn.textContent = ar ? "English" : "العربية";
-      btn.setAttribute(
-        "aria-label",
-        ar ? "Switch to English" : "التبديل إلى العربية"
-      );
+      btn.setAttribute("aria-label", ar ? "Switch to English" : "التبديل إلى العربية");
       try {
         localStorage.setItem("sg-lang", lang);
       } catch (_) {}
     };
 
     btn.addEventListener("click", () => {
-      const cur = document.documentElement.classList.contains("lang-ar")
-        ? "ar"
-        : "en";
+      const cur = document.documentElement.classList.contains("lang-ar") ? "ar" : "en";
       apply(cur === "ar" ? "en" : "ar");
     });
 
@@ -826,464 +541,9 @@
     apply(saved);
   }
 
-  function setupDownloadModal() {
-    const btn = document.getElementById("downloadBtn");
-    const modal = document.getElementById("downloadModal");
-    if (!btn || !modal) return;
+  // ── FAQ ───────────────────────────────────────────────────────────────────
 
-    let lastFocus = null;
-
-    const open = () => {
-      lastFocus = document.activeElement;
-      modal.hidden = false;
-      document.body.style.overflow = "hidden";
-      const first = modal.querySelector(".dl-option:not([disabled]), .dl-modal__close");
-      if (first) first.focus();
-    };
-
-    const close = () => {
-      modal.hidden = true;
-      document.body.style.overflow = "";
-      if (lastFocus && lastFocus.focus) lastFocus.focus();
-    };
-
-    btn.addEventListener("click", open);
-
-    // Any in-page CTA can raise the same modal (hero, install steps, footer)
-    // instead of each one duplicating the platform list.
-    document.querySelectorAll("[data-download-open]").forEach((el) => {
-      el.addEventListener("click", (e) => {
-        e.preventDefault();
-        open();
-      });
-    });
-
-    modal.querySelectorAll("[data-close]").forEach((el) => {
-      el.addEventListener("click", close);
-    });
-
-    modal.querySelectorAll(".dl-option:not(.dl-option--soon)").forEach((el) => {
-      el.addEventListener("click", () => setTimeout(close, 150));
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !modal.hidden) close();
-    });
-  }
-
-  // ── Live community stats (section 5) ───────────────────────────────────────
-  // Backed by public.public_live_stats() — an aggregate-only Postgres function
-  // granted to `anon` (supabase/migrations/0022_public_live_stats.sql).
-  //
-  // The publishable key is safe to ship in a static bundle: every table sits
-  // behind RLS, and this RPC is the only thing anon may call that reads them.
-  // It takes no arguments and returns nothing per-user, so the endpoint cannot
-  // be turned into a "is player X online?" oracle.
-  const LIVE = {
-    url: "https://oschpozvdrdpjlsgadgl.supabase.co/rest/v1/rpc/public_live_stats",
-    key: "sb_publishable_QwU5OjJzlQY2RwnJ5q9XXw_olcDysTU",
-    refreshMs: 60000,
-    timeoutMs: 8000,
-  };
-
-  // Compact above 10k so a big community never blows out the stat row.
-  const fmtCount = (n) => {
-    if (!Number.isFinite(n)) return "—";
-    if (n >= 1000000) return `${(n / 1000000).toFixed(n >= 10000000 ? 0 : 1)}M`;
-    if (n >= 10000) return `${(n / 1000).toFixed(n >= 100000 ? 0 : 1)}k`;
-    return n.toLocaleString("en-US");
-  };
-
-  const countUp = (el, target) => {
-    if (!el) return;
-    const from = parseInt(String(el.dataset.raw || "0"), 10) || 0;
-    el.dataset.raw = String(target);
-    if (reduceMotion || document.hidden || from === target) {
-      el.textContent = fmtCount(target);
-      return;
-    }
-    const dur = 900;
-    const t0 = performance.now();
-    const step = (now) => {
-      const p = Math.min(1, (now - t0) / dur);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = fmtCount(Math.round(from + (target - from) * eased));
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-    // A throttled or non-compositing tab can report visible and still never
-    // service requestAnimationFrame, which would strand the figure on its "—"
-    // placeholder forever. Land on the real number either way.
-    clearTimeout(el._settle);
-    el._settle = setTimeout(() => {
-      if (el.dataset.raw === String(target)) el.textContent = fmtCount(target);
-    }, dur + 300);
-  };
-
-  function setupLiveStats() {
-    const sheet = document.getElementById("liveSheet");
-    if (!sheet) return;
-
-    const statusEl = document.getElementById("liveStatus");
-    const barsEl = document.getElementById("liveBars");
-    const peakEl = document.getElementById("livePeak");
-    const fields = {
-      online: document.getElementById("statOnline"),
-      hunters: document.getElementById("statHunters"),
-      active: document.getElementById("statActive"),
-      volume: document.getElementById("statVolume"),
-    };
-
-    const DAY_INITIAL = ["S", "M", "T", "W", "T", "F", "S"];
-
-    // Status text has to survive the EN/AR toggle, so write both faces the way
-    // setupLanguage() expects and let it re-render on switch.
-    const setStatus = (en, ar) => {
-      if (!statusEl) return;
-      statusEl.dataset.ar = ar;
-      statusEl.dataset.en = en;
-      statusEl.textContent =
-        document.documentElement.lang === "ar" ? ar : en;
-    };
-
-    const paintBars = (days) => {
-      if (!barsEl || !Array.isArray(days) || !days.length) return;
-      const peak = Math.max(1, ...days.map((d) => Number(d.sessions) || 0));
-      barsEl.innerHTML = days
-        .map((d, i) => {
-          const v = Number(d.sessions) || 0;
-          const pct = Math.round((v / peak) * 100);
-          const last = i === days.length - 1;
-          const dow = new Date(`${d.day}T00:00:00Z`).getUTCDay();
-          const initial = DAY_INITIAL[Number.isNaN(dow) ? i % 7 : dow];
-          return (
-            `<div class="live-bar${last ? " is-today" : ""}" title="${d.day}: ${v} sessions">` +
-            `<span class="live-bar__fill" style="--h:${Math.max(pct, 2)}%"></span>` +
-            `<span class="live-bar__day">${initial}</span>` +
-            `</div>`
-          );
-        })
-        .join("");
-      if (peakEl) peakEl.textContent = `peak ${fmtCount(peak)}`;
-    };
-
-    const apply = (data) => {
-      countUp(fields.online, Number(data.online_now) || 0);
-      countUp(fields.hunters, Number(data.hunters) || 0);
-      countUp(fields.active, Number(data.active_7d) || 0);
-      countUp(fields.volume, Number(data.volume_7d) || 0);
-      paintBars(data.days);
-      sheet.dataset.state = "live";
-      setStatus("live · updates every minute", "مباشر · يتحدّث كل دقيقة");
-    };
-
-    const fail = () => {
-      sheet.dataset.state = "offline";
-      setStatus("live numbers unavailable", "الأرقام المباشرة غير متاحة");
-    };
-
-    let inFlight = false;
-    const pull = async () => {
-      if (inFlight) return;
-      inFlight = true;
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), LIVE.timeoutMs);
-      try {
-        const res = await fetch(LIVE.url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: LIVE.key,
-            Authorization: `Bearer ${LIVE.key}`,
-          },
-          body: "{}",
-          signal: ctrl.signal,
-        });
-        if (!res.ok) throw new Error(`rpc ${res.status}`);
-        const data = await res.json();
-        if (!data || typeof data !== "object") throw new Error("bad payload");
-        apply(data);
-      } catch (_) {
-        // Offline, RPC not deployed yet, or blocked — the section keeps its
-        // copy and simply says so rather than showing a wall of dashes.
-        if (sheet.dataset.state !== "live") fail();
-      } finally {
-        clearTimeout(timer);
-        inFlight = false;
-      }
-    };
-
-    pull();
-
-    // Only poll while the tab is actually being looked at.
-    let timer = 0;
-    const start = () => {
-      if (timer) return;
-      timer = setInterval(() => {
-        if (!document.hidden) pull();
-      }, LIVE.refreshMs);
-    };
-    const stop = () => {
-      clearInterval(timer);
-      timer = 0;
-    };
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) stop();
-      else {
-        pull();
-        start();
-      }
-    });
-    start();
-  }
-
-  async function boot() {
-    setupLanguage();
-    setupDownloadModal();
-    setupLiveStats();
-
-    const modeQuery = window.matchMedia("(max-width: 900px), (pointer: coarse)");
-    const mobile = window.innerWidth <= 900 || modeQuery.matches;
-
-    // If the layout mode flips (e.g. a desktop window resized past the
-    // breakpoint), re-initialise cleanly so neither rig is ever half-wired.
-    const onModeFlip = () => location.reload();
-    if (modeQuery.addEventListener) {
-      modeQuery.addEventListener("change", onModeFlip);
-    } else if (modeQuery.addListener) {
-      modeQuery.addListener(onModeFlip);
-    }
-
-    // Keep-your-section-on-refresh only applies to the desktop horizontal rig;
-    // let the browser restore normal vertical position on touch devices.
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = mobile ? "auto" : "manual";
-    }
-
-    const track = document.getElementById("track");
-
-    // Build the traveling prototype sprite for every section up front.
-    const heroes = {};
-    if (track) {
-      document.querySelectorAll(".road-runner[data-journey]").forEach((el) => {
-        const idx = parseInt(el.dataset.journey, 10);
-        const canvas = el.querySelector("canvas");
-        if (Number.isNaN(idx) || !canvas) return;
-        const cfg = JOURNEY[idx];
-        heroes[idx] = {
-          el,
-          sprite: new SpritePlayer(canvas, { scale: cfg ? cfg.scale : 3.4 }),
-        };
-      });
-    }
-
-    if (track && mobile) {
-      // Native vertical scroll — do NOT construct HorizontalHunt (no wheel/touch
-      // hijacking, no snap fighting). Just animate each prototype in place.
-      setupVerticalMode(heroes);
-    } else if (track) {
-      // Desktop: horizontal scroll, left to right, one panel per gesture.
-      // The prototype stays FIXED in place, centered on the ground line, looping
-      // his run while the sections slide past — he never travels the ground.
-      const hunt = new HorizontalHunt(track);
-      hunt._journey = JOURNEY;
-
-      hunt._onStage = (index, stage) => {
-        const cfg = JOURNEY[index];
-        const hero = heroes[index];
-        if (!cfg || !hero) return;
-        const i = Math.max(0, Math.min(cfg.stages.length - 1, stage));
-        const st = cfg.stages[i];
-        clearTimeout(hero._settleT);
-        hero.el.classList.remove("is-sprintoff");
-        hero.el.style.transition = "none";
-        hero.el.style.left = "50%";
-        hero.el.classList.toggle("is-sleeping", !!st.sleep);
-        hero.sprite.play(st.anim, { loop: st.loop !== false }).catch(() => {});
-      };
-
-      // Fixed in place — no sprint-off exit; pan straight to the next section.
-      hunt._onExit = () => Promise.resolve();
-
-      // Render the current section's opening pose (snapped into place).
-      hunt._applyStage(true);
-    }
-
-    setupFinalShockReaction(heroes);
-
-    // Auto‑battle arena (section 4)
-    const arenaEl = document.getElementById("arena");
-    if (arenaEl) new Arena(arenaEl);
-
-    // Rank shields (section 2) — big shield shatters, revealing the next behind
-    const shieldMain = document.getElementById("shieldMain");
-    const shieldBack = document.getElementById("shieldBack");
-    const shieldShards = document.getElementById("shieldShards");
-    if (shieldMain && shieldBack && shieldShards) {
-      const ranks = ["E", "D", "C", "BB", "A", "S", "SG"];
-      const shields = ranks.map((r) => `media/ui/${r}%20Rank.png`);
-      let si = 0;
-      shieldMain.src = shields[0];
-      shieldBack.src = shields[1 % shields.length];
-
-      const buildShards = (src, n) => {
-        shieldShards.innerHTML = "";
-        for (let i = 0; i < n; i++) {
-          const a1 = (i / n) * Math.PI * 2 - Math.PI / 2;
-          const a2 = ((i + 1) / n) * Math.PI * 2 - Math.PI / 2;
-          const R = 82;
-          const p1x = 50 + R * Math.cos(a1);
-          const p1y = 50 + R * Math.sin(a1);
-          const p2x = 50 + R * Math.cos(a2);
-          const p2y = 50 + R * Math.sin(a2);
-          const mid = (a1 + a2) / 2;
-          const d = document.createElement("div");
-          d.className = "shield-piece";
-          d.style.backgroundImage = `url("${src}")`;
-          d.style.clipPath = `polygon(50% 50%, ${p1x}% ${p1y}%, ${p2x}% ${p2y}%)`;
-          d.style.setProperty("--tx", `${Math.cos(mid) * 64}px`);
-          d.style.setProperty("--ty", `${Math.sin(mid) * 64}px`);
-          d.style.setProperty("--rot", `${(Math.random() * 90 - 45).toFixed(1)}deg`);
-          shieldShards.appendChild(d);
-        }
-      };
-
-      // Ladder under the shield: every rank, where you are, how far it goes.
-      const ladder = document.getElementById("rankLadder");
-      const fill = document.getElementById("rankFill");
-      const rankName = document.getElementById("rankName");
-      const pips = [];
-      if (ladder) {
-        ranks.forEach((r, i) => {
-          const pip = document.createElement("button");
-          pip.type = "button";
-          pip.className = "rank-pip";
-          pip.setAttribute("role", "listitem");
-          pip.setAttribute("aria-label", `${r} rank`);
-          pip.textContent = r;
-          pip.addEventListener("click", () => showRank(i));
-          ladder.appendChild(pip);
-          pips.push(pip);
-        });
-      }
-
-      const paintLadder = () => {
-        pips.forEach((p, i) => {
-          p.classList.toggle("is-current", i === si);
-          p.classList.toggle("is-done", i < si);
-        });
-        if (fill) {
-          fill.style.width = `${(si / (ranks.length - 1)) * 100}%`;
-        }
-        if (rankName) rankName.textContent = ranks[si];
-      };
-
-      const showRank = (i) => {
-        si = ((i % ranks.length) + ranks.length) % ranks.length;
-        shieldMain.src = shields[si];
-        shieldMain.classList.remove("is-gone");
-        shieldBack.src = shields[(si + 1) % shields.length];
-        paintLadder();
-      };
-
-      paintLadder();
-
-      if (!reduceMotion) {
-        (async () => {
-          for (;;) {
-            await wait(1700);
-            // Shatter the front shield — the next rank is already sitting behind.
-            buildShards(shields[si], 7);
-            shieldMain.classList.add("is-gone");
-            shieldShards.classList.add("is-breaking");
-            await wait(600);
-            shieldShards.classList.remove("is-breaking");
-            shieldShards.innerHTML = "";
-            // Promote the revealed shield to the front, stage the following one behind.
-            showRank(si + 1);
-            await wait(60);
-          }
-        })();
-      }
-    }
-
-    // Training interactive
-    const trainCanvas = document.getElementById("trainSprite");
-    let trainPlayer = null;
-    if (trainCanvas) {
-      trainPlayer = new SpritePlayer(trainCanvas, { scale: 4 });
-      await trainPlayer.play("punch").catch(() => {});
-      document.querySelectorAll(".move-strip button").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          document.querySelectorAll(".move-strip button").forEach((b) => b.classList.remove("is-on"));
-          btn.classList.add("is-on");
-          await trainPlayer.play(btn.dataset.move).catch(() => {});
-        });
-      });
-    }
-
-    // Loot chests (section 5) — idle loop; tap to pop open (no reward popup).
-    document.querySelectorAll(".chest").forEach((btn) => {
-      const canvas = btn.querySelector(".chest__sprite");
-      const tier = btn.dataset.tier;
-      if (!canvas || !tier) return;
-      const sp = new SpritePlayer(canvas, { scale: 3 });
-      const idle = () =>
-        sp.play(`chest-${tier}-idle`, { loop: true }).catch(() => {});
-      idle();
-      let isOpen = false;
-      let resetTimer = 0;
-      btn.addEventListener("click", async () => {
-        if (isOpen) return;
-        isOpen = true;
-        btn.classList.add("is-open");
-        await sp.play(`chest-${tier}-open`, { loop: false }).catch(() => {});
-        clearTimeout(resetTimer);
-        resetTimer = setTimeout(() => {
-          btn.classList.remove("is-open");
-          isOpen = false;
-          idle();
-        }, 2600);
-      });
-    });
-
-    // Stats (section 6) — count up when the grid scrolls into view.
-    const statGrid = document.getElementById("statGrid");
-    if (statGrid) {
-      const nums = [...statGrid.querySelectorAll(".stat__num")];
-      const runCount = () => {
-        nums.forEach((el) => {
-          if (el.dataset.done) return;
-          el.dataset.done = "1";
-          const target = parseInt(el.dataset.count, 10) || 0;
-          const suffix = el.dataset.suffix || "";
-          if (reduceMotion) {
-            el.textContent = `${target}${suffix}`;
-            return;
-          }
-          const dur = 1100;
-          const t0 = performance.now();
-          const step = (now) => {
-            const p = Math.min(1, (now - t0) / dur);
-            const eased = 1 - Math.pow(1 - p, 3);
-            el.textContent = `${Math.round(target * eased)}${suffix}`;
-            if (p < 1) requestAnimationFrame(step);
-          };
-          requestAnimationFrame(step);
-        });
-      };
-      if ("IntersectionObserver" in window) {
-        const io = new IntersectionObserver(
-          (entries) => entries.forEach((e) => e.isIntersecting && runCount()),
-          { threshold: 0.4 }
-        );
-        io.observe(statGrid);
-      } else {
-        runCount();
-      }
-    }
-
-    // FAQ (section 7) — single-open accordion.
+  function setupFaq() {
     document.querySelectorAll(".faq-q").forEach((q) => {
       q.addEventListener("click", () => {
         const list = q.closest(".faq-list");
@@ -1292,27 +552,75 @@
         if (list) {
           list.querySelectorAll(".faq-q").forEach((o) => {
             o.setAttribute("aria-expanded", "false");
-            o.closest(".faq-item").classList.remove("is-open");
+            const other = o.closest(".faq-item");
+            if (other) other.classList.remove("is-open");
           });
         }
-        if (!wasOpen) {
+        if (!wasOpen && item) {
           q.setAttribute("aria-expanded", "true");
           item.classList.add("is-open");
         }
       });
     });
+  }
 
-    // Generic canvases with data-anim
-    document.querySelectorAll("canvas[data-anim]").forEach(async (canvas) => {
-      if (canvas.id === "trainSprite" || canvas.id === "heroSprite") return;
-      const key = canvas.dataset.anim;
-      const flip = canvas.dataset.flip === "1";
-      const scale = canvas.closest(".get") ? 2.8 : 3;
-      const player = new SpritePlayer(canvas, { scale, flip });
-      try {
-        await player.play(key);
-      } catch (_) {}
-    });
+  // ── Boot ──────────────────────────────────────────────────────────────────
+
+  function boot() {
+    setupLanguage();
+    setupFaq();
+    setupReveal();
+
+    const track = document.getElementById("track");
+    if (!track) return;
+
+    const modeQuery = window.matchMedia("(max-width: 900px), (pointer: coarse)");
+    const mobile = modeQuery.matches;
+
+    // If the layout mode flips (a desktop window dragged past the breakpoint)
+    // re-initialise cleanly, so neither rig is ever left half-wired.
+    const onModeFlip = () => location.reload();
+    if (modeQuery.addEventListener) {
+      modeQuery.addEventListener("change", onModeFlip);
+    } else if (modeQuery.addListener) {
+      modeQuery.addListener(onModeFlip);
+    }
+
+    // Keeping your place on refresh only applies to the horizontal rig; on a
+    // phone the browser's own restore is the expected behaviour.
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = mobile ? "auto" : "manual";
+    }
+
+    // The runner is hidden below 600px (see site.css), so on a small phone
+    // there is nothing to animate — and building the players anyway would
+    // fetch seven sprite frames to draw them into a display:none canvas.
+    const runnerVisible = !window.matchMedia("(max-width: 600px)").matches;
+    const heroes = {};
+    if (runnerVisible) {
+      document.querySelectorAll(".road-runner[data-journey]").forEach((el) => {
+        const idx = parseInt(el.dataset.journey, 10);
+        const canvas = el.querySelector("canvas");
+        if (Number.isNaN(idx) || !canvas) return;
+        const cfg = JOURNEY[idx];
+        heroes[idx] = {
+          el,
+          sprite: new SpritePlayer(canvas, { scale: cfg ? cfg.scale : 2.2 }),
+        };
+      });
+    }
+
+    if (mobile) {
+      setupVerticalMode(heroes);
+    } else {
+      new HorizontalHunt(track);
+      Object.values(heroes).forEach((hero) => {
+        hero.el.style.left = "50%";
+        hero.sprite.play("idle", { loop: true }).catch(() => {});
+      });
+    }
+
+    setupFinalShockReaction(heroes);
   }
 
   if (document.readyState === "loading") {

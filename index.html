@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- `js` gates the scroll-reveal start state in site.css. Inline, and in the
+       head on purpose: a deferred script would set it after first paint, so
+       the content would draw, blink out, then animate back in. -->
+  <script>document.documentElement.classList.add("js");</script>
   <meta name="description" content="Solo Gainz — hunt-ready fitness combat on Android. Daily quests, real combat frames, local Wi‑Fi PVP, loot chests, and rank shields. Fully offline. Direct APK download." />
   <meta name="theme-color" content="#071426" />
   <meta name="robots" content="index, follow" />
@@ -23,7 +27,7 @@
   <meta name="twitter:image" content="https://sologainz.github.io/app_thumbnail.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="site.css" />
 </head>
 <body class="track-page">
@@ -142,7 +146,7 @@
       <footer class="panel__inner site-footer">
         <div class="site-footer__top">
           <div class="site-footer__brand">
-            <img class="site-footer__logo" src="app_icon.png" alt="Solo Gainz app icon" />
+            <img class="site-footer__logo" src="app_icon.png" alt="Solo Gainz app icon" width="56" height="56" loading="lazy" decoding="async" />
             <div>
               <p class="site-footer__name">Solo Gainz</p>
               <p class="site-footer__tag" data-ar="قتال لياقة. يعمل دون إنترنت تمامًا.">Fitness combat. Fully offline.</p>
@@ -151,7 +155,6 @@
           <a class="btn btn--primary site-footer__download" href="https://github.com/sologainz/sologainz.github.io/releases/latest/download/Solo.Gainz.apk" download="Solo.Gainz.apk" rel="noopener" data-ar="تحميل التطبيق">Download the app</a>
           <nav class="site-footer__nav" aria-label="Footer">
             <a href="#panel-0" data-ar="الرئيسية">Home</a>
-            <a href="library.html" data-ar="مكتبة التمارين">Exercise Library</a>
             <a href="privacy.html" data-ar="سياسة الخصوصية">Privacy Policy</a>
             <a href="terms.html" data-ar="الشروط والأحكام">Terms &amp; Conditions</a>
           </nav>
@@ -170,6 +173,6 @@
     </section>
   </div>
 
-  <script src="site.js"></script>
+  <script src="site.js" defer></script>
 </body>
 </html>
