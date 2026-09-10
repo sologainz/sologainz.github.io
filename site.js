@@ -180,7 +180,6 @@
       this.fill = document.getElementById("scrollFill");
       this.dots = document.getElementById("dots");
       this.index = 0;
-      this._prevIndex = 0;
       this._storeKey = "sg-panel";
       this._buildDots();
       this._restore();
@@ -275,7 +274,6 @@
 
       const idx = Math.round(t.scrollLeft / t.clientWidth);
       this.index = Math.max(0, Math.min(this.panels.length - 1, idx));
-      this._prevIndex = this.index;
 
       try {
         sessionStorage.setItem(this._storeKey, String(this.index));
