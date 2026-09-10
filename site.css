@@ -1,8 +1,8 @@
 /* Tenada ships as a Latin-only WOFF2 subset.
-   The original is a Korean display face: 12,264 glyphs, 996 KB of raw TTF,
-   downloaded in full on every visit to render English headings. Subset to
-   Latin (Arabic headings fall through to Cairo, see .lang-ar below) and
-   compressed, the same type costs 9.6 KB. */
+ The original is a Korean display face: 12,264 glyphs, 996 KB of raw TTF,
+ downloaded in full on every visit to render English headings. Subset to
+ Latin - the site is English only - and compressed, the same type costs
+ 9.6 KB. */
 @font-face {
   font-family: "Tenada";
   src: url("fonts/Tenada.woff2") format("woff2");
@@ -31,11 +31,6 @@
   --font-legal: "Newsreader", Georgia, "Times New Roman", serif;
   --font-legal-ui: "Inter", system-ui, sans-serif;
   --chrome-h: 64px;
-  /* Ground line sits low, near the panel bottom; characters anchor to it. */
-  --road-bottom: clamp(20px, 4.5vh, 42px);
-  /* Space reserved at the bottom of every panel for the traveling prototype, so
-   section content never overlaps the model. */
-  --road-lane: clamp(180px, 24vh, 290px);
 }
 
 *,
@@ -131,7 +126,10 @@ body.track-page {
   transition: width 0.08s linear;
 }
 
-/* Language + Download are one linked segmented bar sharing the signal look. */
+/* One bar, one action. This used to be a segmented control - a language
+ toggle welded to Download - and the two shared the slanted signal block
+ between them. With Arabic gone the block belongs entirely to Download, which
+ is the only thing anyone came to the header to do. */
 .chrome__actions {
   display: inline-flex;
   align-items: stretch;
@@ -140,7 +138,6 @@ body.track-page {
   transition: filter 0.18s ease, transform 0.18s ease;
 }
 
-.chrome__lang,
 .chrome__apk {
   display: inline-flex;
   align-items: center;
@@ -148,7 +145,7 @@ body.track-page {
   text-align: center;
   text-decoration: none;
   color: #041018;
-  font-family: "Cairo", "Inter", system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.78rem;
   line-height: 1;
@@ -161,20 +158,14 @@ body.track-page {
   transition: background 0.18s ease;
 }
 
-/* Fixed widths so switching between Arabic/English labels never resizes the
- bar (e.g. "العربية"↔"English", "Download"↔"تحميل"). */
-.chrome__lang {
-  min-width: 5.75rem;
-  border-right: 1px solid rgba(4, 16, 24, 0.28);
-}
-
+/* Wide enough to read as the header's one deliberate destination, rather
+ than the leftover half of the pair it used to be. */
 .chrome__apk {
-  min-width: 6.5rem;
+  min-width: 12.25rem;
+  padding-inline: 1.35rem;
 }
 
-.chrome__lang:hover,
 .chrome__apk:hover,
-.chrome__lang:focus-visible,
 .chrome__apk:focus-visible {
   background: rgba(4, 16, 24, 0.12);
   outline: none;
@@ -187,46 +178,6 @@ body.track-page {
   drop-shadow(1.5px 1.5px 0 #fff) drop-shadow(-1.5px 1.5px 0 #fff)
   drop-shadow(1.5px -1.5px 0 #fff) drop-shadow(-1.5px -1.5px 0 #fff)
   drop-shadow(0 0 6px rgba(255, 255, 255, 0.55));
-}
-
-/* ── Arabic / RTL ───────────────────────────────────────────────────────── */
-html.lang-ar body,
-html.lang-ar p,
-html.lang-ar li,
-html.lang-ar a,
-html.lang-ar button,
-html.lang-ar span,
-html.lang-ar h2,
-html.lang-ar h3,
-html.lang-ar .kicker,
-html.lang-ar .body {
-  font-family: "Cairo", "Tajawal", system-ui, sans-serif;
-}
-
-/* Keep the Latin brand wordmarks in the display face even in Arabic mode. */
-html.lang-ar .mega,
-html.lang-ar .chrome__brand,
-html.lang-ar .chrome__brand span,
-html.lang-ar .site-footer__name {
-  font-family: var(--font-mega);
-}
-
-/* Arabic mirrors the two-column layout: text/titles sit on the right of the
- content, visuals on the left. English keeps the original left/right order. */
-html.lang-ar .faq,
-html.lang-ar .trailer {
-  direction: rtl;
-}
-
-/* Right-align the copy that was explicitly left-aligned in English. */
-html.lang-ar .trailer__copy,
-html.lang-ar .faq__copy,
-html.lang-ar .faq-q,
-html.lang-ar .faq-a > p,
-html.lang-ar .body,
-html.lang-ar .kicker,
-html.lang-ar h2 {
-  text-align: right;
 }
 
 /* ── Dots + hint ────────────────────────────────────────────────────────── */
@@ -303,85 +254,18 @@ html.lang-ar h2 {
   isolation: isolate;
 }
 
-/* Shared arena floor/wall strip the prototype runs against — same on every
- section (mirrors the intro arena). */
-.panel::before {
-  display: none;
-}
-
-/* Continuous glowing ground line across every section. */
-.panel::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: var(--road-bottom);
-  height: 2px;
-  z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(
-  90deg,
-  transparent,
-  rgba(126, 207, 255, 0.55) 12%,
-  rgba(126, 207, 255, 0.55) 88%,
-  transparent
-  );
-  box-shadow: 0 0 16px rgba(62, 176, 255, 0.45),
-  0 0 40px rgba(62, 176, 255, 0.2);
-}
-
-/* The prototype that travels the road through each section. It walks smoothly
- between waypoints (animated `left`); the sprint-off exit animates transform.
- Entering a section repositions instantly (transition disabled in JS). */
-.road-runner {
-  position: absolute;
-  bottom: var(--road-bottom);
-  left: 14%;
-  width: min(50%, 360px);
-  z-index: 3;
-  transform: translate(-50%, 0);
-  transition: left 0.75s cubic-bezier(0.45, 0, 0.25, 1);
-  will-change: left, transform;
-  pointer-events: none;
-}
-
-.road-runner canvas {
-  display: block;
-  width: 100%;
-  height: auto;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.5));
-}
-
-/* Intro prototype is a touch larger. */
-.road-runner--hero {
-  width: min(50%, 360px);
-}
-
 /* No prototype on the intro/hero panel — he only appears from the 2nd section on. */
-.panel--intro .road-runner {
-  display: none;
-}
-
-/* Intro panel: no ground strip or glowing line under the title. */
-.panel--intro::before,
-.panel--intro::after {
-  display: none;
-}
-
 .panel--intro .panel__inner {
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
 }
 
-/* Sleep "Zzz" for the final resting prototype. */
 .panel__inner {
   position: relative;
   z-index: 2;
   height: 100%;
   padding: calc(var(--chrome-h) + 2rem + env(safe-area-inset-top, 0px))
   max(clamp(1.25rem, 5vw, 5rem), env(safe-area-inset-right, 0px))
-  var(--road-lane)
+  calc(2.5rem + env(safe-area-inset-bottom, 0px))
   max(clamp(1.25rem, 5vw, 5rem), env(safe-area-inset-left, 0px));
   display: flex;
   /* "safe" keeps content pinned below the header instead of overflowing up
@@ -552,12 +436,18 @@ h2 {
   gap: 1.6rem;
 }
 
+/* Centred as a column: brand, then links.
+ It used to be a three-across row - brand, download button, nav - which fitted
+ in Arabic and wrapped in English, so the two languages disagreed about what
+ the footer looked like. The button is gone (the header carries the download
+ now, and repeating it one screen below was the same click twice), and what is
+ left is short enough to stack and centre at every width. */
 .site-footer__top {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 2rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.6rem;
 }
 
 .site-footer__brand {
@@ -590,8 +480,10 @@ h2 {
 }
 
 .site-footer__nav {
-  display: grid;
-  grid-template-columns: repeat(2, auto);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   gap: 0.5rem 2rem;
 }
 
@@ -620,9 +512,10 @@ h2 {
 .site-footer__bottom {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: center;
+  gap: 0.4rem 1.5rem;
   flex-wrap: wrap;
+  text-align: center;
 }
 
 .site-footer__copy {
@@ -786,8 +679,7 @@ h2 {
     align-items: safe center;
     padding: calc(var(--chrome-h) + 1.75rem + env(safe-area-inset-top, 0px))
     max(clamp(1.15rem, 6vw, 2.5rem), env(safe-area-inset-right, 0px))
-    calc(var(--road-lane) + env(safe-area-inset-bottom, 0px))
-    max(clamp(1.15rem, 6vw, 2.5rem), env(safe-area-inset-left, 0px));
+    calc(2.5rem + env(safe-area-inset-bottom, 0px));
   }
 
   /* Collapse every multi-column layout into one centered column. */
@@ -868,33 +760,16 @@ h2 {
     align-self: stretch;
   }
 
-  /* Ground + hero lane sit tighter so content isn't floating above empty space. */
   :root {
-    --road-bottom: clamp(12px, 2.8vh, 22px);
-    --road-lane: clamp(90px, 15vh, 140px);
   }
 
   /* Hero: centered on the ground line, looping (no scroll-stepping on touch). */
-  .road-runner,
-  .road-runner--hero {
-    left: 50%;
-    transition: none;
-  }
-
-  .road-runner {
-    width: min(38vw, 145px);
-  }
-
-  .road-runner--hero {
-    width: min(45vw, 165px);
-  }
-
   .mega {
     font-size: clamp(3.1rem, 14vw, 4.8rem);
   }
 
   .panel--trailer .panel__inner {
-    padding-bottom: calc(var(--road-lane) * 0.85 + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(2.5rem + env(safe-area-inset-bottom, 0px));
   }
 
   /* Native vertical scroll — the side dots + hint aren't needed. */
@@ -904,12 +779,6 @@ h2 {
 }
 
 @media (max-width: 768px) {
-  .chrome__lang {
-    min-width: 4.6rem;
-    padding: 0.5rem 0.65rem;
-    font-size: 0.72rem;
-  }
-
   .chrome__apk {
     min-width: 5.2rem;
     padding: 0.5rem 0.7rem;
@@ -952,10 +821,6 @@ h2 {
     max-width: 9.5rem;
   }
 
-  .chrome__lang {
-    min-width: 4.1rem; padding: 0.48rem 0.55rem; font-size: 0.68rem;
-  }
-
   .chrome__apk {
     min-width: 4.7rem; padding: 0.48rem 0.6rem; font-size: 0.68rem;
   }
@@ -974,7 +839,6 @@ h2 {
   }
 
   :root {
-    --road-lane: clamp(76px, 14vh, 118px);
   }
 
   /* On narrow phones the CTA spans the column for an easy tap target. */
@@ -984,14 +848,6 @@ h2 {
 }
 
 @media (max-width: 380px) {
-  .road-runner {
-    width: min(40vw, 120px);
-  }
-
-  .road-runner--hero {
-    width: min(50vw, 140px);
-  }
-
   .body {
     font-size: 0.9rem;
   }
@@ -1013,11 +869,10 @@ h2 {
 
   .panel__inner {
     padding-top: calc(var(--chrome-h) + 1.1rem + env(safe-area-inset-top, 0px));
-    padding-bottom: calc(var(--road-lane) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(2.5rem + env(safe-area-inset-bottom, 0px));
   }
 
   :root {
-    --road-lane: clamp(72px, 22vh, 106px);
   }
 }
 
@@ -1027,10 +882,9 @@ h2 {
   :root {
     --chrome-h: 56px;
     /* The travelling figure is hidden at this width (see below), so the lane
-       reserved for him is dead space at the bottom of every panel - it was
-       pushing content up into the header on short phones. Keep just enough
-       to breathe. */
-    --road-lane: 24px;
+     reserved for him is dead space at the bottom of every panel - it was
+     pushing content up into the header on short phones. Keep just enough
+     to breathe. */
   }
 
   .chrome {
@@ -1057,8 +911,7 @@ h2 {
   }
 
   /* 44px is the smallest target a thumb hits reliably, and the floor both
-     Android and WCAG ask for. Everything tappable on a phone clears it. */
-  .chrome__lang,
+   Android and WCAG ask for. Everything tappable on a phone clears it. */
   .chrome__apk {
     min-width: 0;
     min-height: 44px;
@@ -1074,26 +927,17 @@ h2 {
     min-height: 44px;
   }
 
-  .site-footer__download {
-    min-height: 48px;
-  }
-
   .panel__inner {
     min-height: 100svh;
     padding-top: calc(var(--chrome-h) + 1rem + env(safe-area-inset-top, 0px));
     padding-right: max(1rem, env(safe-area-inset-right, 0px));
-    padding-bottom: calc(var(--road-lane) + 1rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(2.5rem + env(safe-area-inset-bottom, 0px));
     padding-left: max(1rem, env(safe-area-inset-left, 0px));
   }
 
   .mega {
     font-size: 3.8rem;
     line-height: 0.95;
-  }
-
-  .road-runner,
-  .panel--intro .road-runner {
-    display: none;
   }
 
   .panel--intro .mega {
@@ -1103,22 +947,22 @@ h2 {
   }
 
   /* The travelling figure is hidden here, so nothing is competing with the
-     title for the lower half of the panel - centring it stops the hero
-     reading as a headline stranded above an empty screen. */
+   title for the lower half of the panel - centring it stops the hero
+   reading as a headline stranded above an empty screen. */
   .panel--intro .intro {
     justify-content: center;
     padding-bottom: 3rem;
   }
 
   /* In the flow rather than pinned to the panel's bottom edge. The default
-     offset is measured off the runner's lane, which is nearly nothing at this
-     width, so it computed to a negative bottom and parked the hint below the
-     fold - and any absolute offset would be one more thing to keep in step
-     with the browser chrome a phone paints over the viewport. Sitting under
-     the title, it cannot be pushed off screen at all.
-     Scoped to the panel so it out-specifies the unscoped base rule, which
-     sits later in this file and would otherwise win regardless of the media
-     query. */
+   offset is measured off the runner's lane, which is nearly nothing at this
+   width, so it computed to a negative bottom and parked the hint below the
+   fold - and any absolute offset would be one more thing to keep in step
+   with the browser chrome a phone paints over the viewport. Sitting under
+   the title, it cannot be pushed off screen at all.
+   Scoped to the panel so it out-specifies the unscoped base rule, which
+   sits later in this file and would otherwise win regardless of the media
+   query. */
   .panel--intro .scroll-cue {
     position: static;
     transform: none;
@@ -1129,11 +973,6 @@ h2 {
     min-height: 44px;
     display: flex;
     align-items: center;
-  }
-
-  .site-footer__download {
-    width: min(100%, 18rem);
-    justify-content: center;
   }
 
   h2 {
@@ -1187,14 +1026,6 @@ h2 {
 
   .site-footer__nav a {
     font-size: 0.84rem;
-  }
-
-  .road-runner {
-    width: min(32vw, 112px);
-  }
-
-  .road-runner--hero {
-    width: min(38vw, 132px);
   }
 }
 
@@ -1431,48 +1262,10 @@ body.legal {
  The hero previously had no call to action at all — the only download
  entry point was the small chrome button.
  ═══════════════════════════════════════════════════════════════════════ */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.55rem;
-  padding: 0.95rem 1.6rem;
-  border: 0;
-  border-radius: 14px;
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  text-decoration: none;
-  cursor: pointer;
-  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
-  box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease;
-}
-
-.btn svg {
-  width: 1.1rem; height: 1.1rem; flex: none;
-}
-
-.btn--primary {
-  color: #04121f;
-  background: linear-gradient(135deg, #7cd0ff, var(--signal));
-  box-shadow: 0 14px 34px rgba(62, 176, 255, 0.32);
-}
-
-.btn--primary:hover,
-.btn--primary:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 44px rgba(62, 176, 255, 0.44);
-}
-
-.btn:active {
-  transform: translateY(0) scale(0.98);
-}
-
 .scroll-cue {
   position: absolute;
   left: 50%;
-  bottom: calc(var(--road-lane) - clamp(30px, 5vh, 52px));
+  bottom: clamp(1.5rem, 5vh, 3rem);
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -1512,28 +1305,10 @@ body.legal {
   50% { transform: rotate(45deg) translate(3px, -3px); opacity: 1; }
 }
 
-html.lang-ar .scroll-cue__arrow {
-  background: linear-gradient(270deg, rgba(232, 240, 255, 0.05), var(--signal));
-}
-
-html.lang-ar .scroll-cue__arrow::after {
-  right: auto;
-  left: -1px;
-  transform: rotate(-135deg);
-}
-
 /* Gated on `.js`, which site.js sets on <html> before first paint. If the
-   script fails to load or is blocked, the start state never applies and the
-   page reads as plain, fully visible content instead of a blank screen. */
-.js [data-reveal] {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.62s cubic-bezier(0.2, 0.8, 0.2, 1),
-  transform 0.62s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.panel.is-active [data-reveal],
-.js [data-reveal].is-in {
+ script fails to load or is blocked, the start state never applies and the
+ page reads as plain, fully visible content instead of a blank screen. */
+.panel.is-active [data-reveal] {
   opacity: 1;
   transform: none;
 }
@@ -1560,13 +1335,6 @@ html.lang-ar .scroll-cue__arrow::after {
 
 .panel.is-active [data-reveal]:nth-child(6) {
   transition-delay: 0.45s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .js [data-reveal] {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 /*
@@ -1649,9 +1417,7 @@ dd {
 /* Anything tappable gets a real target on a touch screen, whatever the
  viewport width claims. */
 @media (pointer: coarse) {
-  a.btn,
-  button,
-  .btn {
+  button {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
